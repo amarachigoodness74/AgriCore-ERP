@@ -47,6 +47,7 @@
     "ioredis": "^5.4.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "nodemailer": "^6.10.0",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0"
   },

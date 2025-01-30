@@ -14,23 +14,27 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  email      String    @unique
-  phone      String
-  gender     String
-  address     Address
-  department String
-  role       String
-  password   String
-  createdBy  String
-  updatedBy  String
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  email             String    @unique
+  phone             String
+  gender            String
+  address           Address
+  department        String
+  role              String
+  password          String
+  mustResetPassword Boolean
+  isActive          Boolean
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  createdBy         String
+  updatedBy         String
 }
 
 type Address {
-  streetNo     Number
-  street String
-  town String
-  state String
-  country String
+  streetNo Int
+  street   String
+  town     String
+  state    String
+  country  String
 }

@@ -1,6 +1,8 @@
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
-import config from 'config';
+import config from 'config';import dotenv from 'dotenv-safe';
+
+dotenv.config();
 
 const sessionConfig = session({
   secret: config.get('session.secret') as string,

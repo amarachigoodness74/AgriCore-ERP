@@ -85,7 +85,7 @@ AgriCore ERP is a robust and scalable Enterprise Resource Planning (ERP) system 
 
 ### Backend
 - [Express.js](https://expressjs.com/) with [TypeScript](https://www.typescriptlang.org/)
-- [PostgreSQL](https://www.postgresql.org/) (or your preferred database)
+- [MongoDB](https://www.mongodb.com/) with [Prisma](https://www.prisma.io/)
 - [Node.js](https://nodejs.org/)
 
 ---

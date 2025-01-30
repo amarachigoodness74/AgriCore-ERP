@@ -1,6 +1,5 @@
-// Dashboard.tsx
-
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import Sidebar from "../components/Sidebar";
-// import { Outlet } from "react-router-dom";
+import { Menu } from "lucide-react";
 
 ChartJS.register(
   CategoryScale,
@@ -22,11 +21,7 @@ ChartJS.register(
   Legend
 );
 
-interface DashboardLayoutProps {
-  children: ReactNode;
-}
-
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+const DashboardLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -38,14 +33,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {/* Mobile Menu Toggle */}
       <button
         onClick={toggleMenu}
-        className="md:hidden absolute top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-md"
+        className="md:hidden absolute top-6 right-6 z-50 bg-gray-800 text-white p-2 rounded-md"
       >
-        ☰
+        <Menu size={24} />
       </button>
-
-      {/* Left Sidebar */}
-      <Sidebar isMenuOpen={isMenuOpen} />
-
       {/* Overlay for mobile menu */}
       {isMenuOpen && (
         <div
@@ -54,8 +45,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         ></div>
       )}
 
+      {/* Left Sidebar */}
+      <Sidebar isMenuOpen={isMenuOpen} />
+
       {/* Main Content */}
-      {children}
+      <div className="flex-1">
+        <Outlet />
+      </div>
     </div>
   );
 };

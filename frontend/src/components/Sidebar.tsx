@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDashboard } from "@fortawesome/free-solid-svg-icons";
+import menuItems from "../utils/routes";
 
 const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const toggleDropdown = (menu: string) => {
+    setOpenDropdown(openDropdown === menu ? null : menu);
+  };
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-800 text-white flex flex-col p-4 transform ${
@@ -11,28 +17,57 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
     >
       <h1 className="text-2xl font-bold mb-4">ERP Dashboard</h1>
       <nav>
-        <ul className="space-y-2">
-          <li className="hover:bg-gray-700 p-2 rounded-md">
-            <a href="/dashboard" className="block">
-              <FontAwesomeIcon icon={faDashboard} />
-              &nbsp; Dashboard
-            </a>
-          </li>
-          <li className="hover:bg-gray-700 p-2 rounded-md">
-            <a href="/inventory/products" className="block">
-              Products
-            </a>
-          </li>
-          <li className="hover:bg-gray-700 p-2 rounded-md">
-            <a href="/inventory/suppliers" className="block">
-              Suppliers
-            </a>
-          </li>
-          <li className="hover:bg-gray-700 p-2 rounded-md">
-            <a href="/inventory/purchase-orders" className="block">
-              Purchase Orders
-            </a>
-          </li>
+        <ul>
+          {menuItems.map((item, index) => (
+            <li key={index} className="mb-2">
+              {item.children ? (
+                <>
+                  <div className="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-700">
+                    <Link
+                      to={item.path as string}
+                      className="block px-3 py-2 rounded hover:bg-gray-700"
+                    >
+                      {item.icon && (
+                        <FontAwesomeIcon icon={item.icon} className="mr-2" />
+                      )}
+                      {item.title}
+                    </Link>
+                    <button onClick={() => toggleDropdown(item.title)}>
+                      {openDropdown === item.title ? (
+                        <ChevronUp />
+                      ) : (
+                        <ChevronDown />
+                      )}
+                    </button>
+                  </div>
+                  {openDropdown === item.title && (
+                    <ul className="ml-4 mt-2 border-l border-gray-600">
+                      {item.children.map((subItem, subIndex) => (
+                        <li key={subIndex} className="mb-1">
+                          <Link
+                            to={subItem.path}
+                            className="block px-3 py-1 hover:bg-gray-700 rounded"
+                          >
+                            {subItem.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : (
+                <Link
+                  to={item.path as string}
+                  className="block px-3 py-2 rounded hover:bg-gray-700"
+                >
+                  {item.icon && (
+                    <FontAwesomeIcon icon={item.icon} className="mr-2" />
+                  )}
+                  {item.title}
+                </Link>
+              )}
+            </li>
+          ))}
         </ul>
       </nav>
     </aside>

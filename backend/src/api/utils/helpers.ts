@@ -81,3 +81,37 @@ export const comparePassword = (
       resolve(res);
     });
   });
+
+// Helper function for password validation
+export const isStrongPassword = (password: string): boolean => {
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+};
+
+export async function generateTokens(
+  employeeInfo: { email: string; role: string },
+  createAccess: boolean,
+  createRefresh: boolean,
+  next: NextFunction
+): Promise<{ accessToken?: string; refreshToken?: string }> {
+  const tokens: { accessToken?: string; refreshToken?: string } = {};
+
+  if (createAccess) {
+    const accessTokenPayload: ICreateToken = {
+      employeeInfo,
+      isRefreshToken: false,
+    };
+    tokens.accessToken = await signAccessToken(accessTokenPayload, next);
+  }
+
+  if (createRefresh) {
+    const refreshTokenPayload: ICreateToken = {
+      employeeInfo,
+      isRefreshToken: true,
+    };
+    tokens.refreshToken = await signAccessToken(refreshTokenPayload, next);
+  }
+
+  return tokens;
+}

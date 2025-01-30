@@ -19,4 +19,17 @@ export const isUser = async (email: string, next: NextFunction) => {
   }
 };
 
-export default isUser;
+export const getUser = async (email: string, next: NextFunction) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return user;
+  } catch (error: any) {
+    logger.error(error.message);
+    return next(new (CustomException as any)(500, 'Operation unsuccessful'));
+  }
+};
+

@@ -1,75 +1,81 @@
-const routes = [
+import { faDashboard } from "@fortawesome/free-solid-svg-icons";
+
+const menuItems = [
   {
-    name: "Dashboard",
+    title: "Dashboard",
     slug: "dashboard",
     path: "/dashboard",
+    icon: faDashboard,
   },
   {
-    name: "Employee Management",
+    title: "Employees",
     slug: "employees",
     path: "/employees",
+    icon: faDashboard,
     children: [
       {
-        name: "Roles and Permissions",
+        title: "Roles and Permissions",
         slug: "roles-permissions",
         path: "/employees/roles-permissions",
       },
       {
-        name: "Attendance Records",
+        title: "Attendance Records",
         slug: "attendance",
         path: "/employees/attendance",
       },
       {
-        name: "Payroll",
+        title: "Payroll",
         slug: "payroll",
         path: "/employees/payroll",
       },
     ],
   },
   {
-    name: "Client Management",
+    title: "Clients",
     slug: "clients",
     path: "/clients",
+    icon: faDashboard,
     children: [
       {
-        name: "Order Management",
+        title: "Order Management",
         slug: "products",
         path: "/inventory/products",
       },
       {
-        name: "Invoice Management",
+        title: "Invoice Management",
         slug: "suppliers",
         path: "/inventory/suppliers",
       },
       {
-        name: "Communication Tracking",
+        title: "Communication Tracking",
         slug: "purchase-orders",
         path: "/inventory/purchase-orders",
       },
       {
-        name: "Analytics and Reporting",
+        title: "Analytics and Reporting",
         slug: "purchase-orders",
         path: "/inventory/purchase-orders",
       },
     ],
   },
   {
-    name: "Inventory",
+    title: "Inventory",
     slug: "inventory",
     path: "/inventory",
+    icon: faDashboard,
     children: [
       {
-        name: "Products",
+        title: "Products",
         slug: "products",
         path: "/inventory/products",
       },
       {
-        name: "Suppliers",
+        title: "Suppliers",
         slug: "suppliers",
         path: "/inventory/suppliers",
       },
       {
-        name: "Purchase Orders",
+        title: "Purchase Orders",
         slug: "purchase-orders",
         path: "/inventory/purchase-orders",
       },
@@ -77,4 +83,4 @@ const routes = [
   },
 ];
 
-export default routes;
+export default menuItems;

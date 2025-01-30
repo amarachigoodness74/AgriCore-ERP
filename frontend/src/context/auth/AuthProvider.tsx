@@ -1,91 +1,64 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import { AuthContext } from "./AuthContext";
+import CircularLoader from "../../components/Loaders/Circular";
 
-const TOKEN_NAME = "demco-token";
+export function AuthProvider({ children }: { children: JSX.Element }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
-function storageSetAuthToken(token: string) {
-  localStorage.setItem(TOKEN_NAME, token);
-}
-
-function storageGetAuthToken() {
-  const token = localStorage.getItem(TOKEN_NAME);
-  return token || null;
-}
-
-function storageDeleteAuthToken() {
-  localStorage.removeItem(TOKEN_NAME);
-}
-
-export function AuthProvider({ children }) {
-  // Retrieve authentication token
-  const [authToken, setAuthToken] = useState(storageGetAuthToken());
-  const [user, setUser] = useState({});
-
-  const handleLogout = useCallback(() => {
-    storageDeleteAuthToken();
-    sessionStorage.clear();
-    setAuthToken(null);
+  // Function to check if the session is valid on page load
+  const checkSession = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_URL}/api/auth/session`, {
+        method: "GET",
+        credentials: "include", // Important to send cookies with request
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentUser(data.user);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        setCurrentUser(null);
+      }
+    } catch (error) {
+      console.error("Error checking session:", error);
+      setIsAuthenticated(false);
+      setCurrentUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Sync authentication token between different tabs
   useEffect(() => {
-    const handleStorage = () => {
-      const currentToken = storageGetAuthToken();
-      setAuthToken(currentToken);
+    checkSession();
+  }, [checkSession]);
 
-      // The authentication token is gone
-      if (!currentToken && authToken) {
-        storageSetAuthToken("");
-        setAuthToken("");
-        return;
-      }
-
-      // The authentication token has changed
-      if (authToken !== currentToken) {
-        window.location.reload();
-      }
-    };
-    window.addEventListener("storage", handleStorage);
-    document.addEventListener("AuthenticationRequiredError", handleLogout);
-
-    return () => {
-      window.removeEventListener("storage", handleStorage);
-      document.removeEventListener("AuthenticationRequiredError", handleLogout);
-    };
-  }, [authToken, handleLogout]);
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
 
   const value = {
-    isAuthenticated: !!authToken,
-    setAuthToken: (token: string) => {
-      storageSetAuthToken(token);
-      setAuthToken(token);
-    },
-    getAuthToken: () => {
-      return new Promise<string>((resolve) => {
-        const token = storageGetAuthToken() as string;
-        resolve(token);
-      });
-    },
-    setCurrentUser: (user: string) => {
-      setUser(user);
-    },
-    getCurrentUser: () => {
-      return new Promise<{}>((resolve) => {
-        resolve(user);
-      });
-    },
-    redirectLogin: (location: any) => {
-      return <Navigate to="/" state={{ from: location }} replace />;
-    },
-    signout() {
-      handleLogout();
-      storageSetAuthToken("");
-      setAuthToken("");
-      this.redirectLogin("/");
-    },
+    isAuthenticated,
+    setIsAuthenticated,
+    currentUser,
+    setCurrentUser,
+    logout: handleLogout,
+    refreshSession: checkSession, // Allows re-fetching session manually
   };
+
+
+  // Don't render children until session check completes
+  if (loading) return <CircularLoader />;
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

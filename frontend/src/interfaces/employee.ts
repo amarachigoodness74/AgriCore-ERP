@@ -6,6 +6,25 @@ interface IAddress {
   country: string;
 }
 
+export interface IResetData {
+  token: string;
+  expiresOn: Date;
+}
+
+export interface IEmployeeWithoutPasswordAndRole {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  gender: string;
+  address: IAddress;
+  department: string;
+  mustResetPassword: boolean;
+  passwordResetData?: IResetData;
+  createdBy: string;
+  updatedBy: string;
+}
+
 export interface IEmployee {
   name: string;
   email: string;
@@ -16,22 +35,7 @@ export interface IEmployee {
   role: string;
   password: string;
   mustResetPassword: boolean;
-  resetToken?: String;
-  resetTokenExpiry?: Date;
-  createdBy: string;
-  updatedBy: string;
-}
-
-export interface IEmployeeWithoutPasswordAndRole {
-  name: string;
-  email: string;
-  phone: string;
-  gender: string;
-  address: IAddress;
-  department: string;
-  mustResetPassword: boolean;
-  resetToken?: String;
-  resetTokenExpiry?: Date;
+  passwordResetData: IResetData;
   createdBy: string;
   updatedBy: string;
 }

@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import LoadingIndicator from "./components/Loaders/Circular";
 import reloadOnFail from "./utils/reloadOnFail";
+import DashboardLayout from "./layouts/Dashboard";
 import RequireAuth from "./context/auth/RequireAuth";
 
 const SignInPage = lazy(() => reloadOnFail(() => import("./pages/Signin")));
@@ -26,13 +27,16 @@ const App = () => {
       </Suspense>
       <Routes>
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <RequireAuth>
-              <Dashboard />
+              <DashboardLayout />
             </RequireAuth>
           }
-        />
+        >
+          {/* Child Routes */}
+          <Route path="dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
     </React.StrictMode>
   );

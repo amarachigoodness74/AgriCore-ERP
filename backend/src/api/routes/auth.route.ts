@@ -12,6 +12,7 @@ import {
   resetPasswordController,
   refreshTokenController,
   logoutController,
+  getSession,
 } from '../controllers/auth.controller';
 
 const router = express.Router();
@@ -40,6 +41,8 @@ router.put(
 );
 
 router.get('/refresh', acountLimiter, refreshTokenController);
+
+router.get('/session', getSession);
 
 router.get('/logout', logoutController);
 
