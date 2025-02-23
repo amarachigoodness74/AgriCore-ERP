@@ -2,7 +2,7 @@ import { NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import config from 'config';
-import logger from '../../config/logger';
+import logger from './logger';
 import { CustomException, InvalidCredentialsException } from './errors';
 import { ICreateToken, IVerifyToken } from '../interfaces/token';
 

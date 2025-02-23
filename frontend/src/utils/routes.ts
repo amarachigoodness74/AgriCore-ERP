@@ -1,27 +1,39 @@
-import { faDashboard } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxesPacking,
+  faHome,
+  faUsers,
+  faUsersRectangle,
+  faUserTie,
+} from "@fortawesome/free-solid-svg-icons";
 
 const menuItems = [
   {
     title: "Dashboard",
     slug: "dashboard",
     path: "/dashboard",
-    icon: faDashboard,
+    icon: faHome,
+  },
+  {
+    title: "Roles and Permissions",
+    slug: "roles-permissions",
+    path: "/user-role",
+    icon: faUserTie,
   },
   {
     title: "Employees",
     slug: "employees",
     path: "/employees",
-    icon: faDashboard,
+    icon: faUsers,
     children: [
-      {
-        title: "Roles and Permissions",
-        slug: "roles-permissions",
-        path: "/employees/roles-permissions",
-      },
       {
         title: "Attendance Records",
         slug: "attendance",
         path: "/employees/attendance",
+      },
+      {
+        title: "Performance",
+        slug: "performance",
+        path: "/employees/performance",
       },
       {
         title: "Payroll",
@@ -34,27 +46,22 @@ const menuItems = [
     title: "Clients",
     slug: "clients",
     path: "/clients",
-    icon: faDashboard,
+    icon: faUsersRectangle,
     children: [
       {
-        title: "Order Management",
-        slug: "products",
-        path: "/inventory/products",
+        title: "Invoices & Payments",
+        slug: "invoices",
+        path: "/clients/invoices",
       },
       {
-        title: "Invoice Management",
-        slug: "suppliers",
-        path: "/inventory/suppliers",
+        title: "Client Support",
+        slug: "support",
+        path: "/clients/support",
       },
       {
-        title: "Communication Tracking",
-        slug: "purchase-orders",
-        path: "/inventory/purchase-orders",
-      },
-      {
-        title: "Analytics and Reporting",
-        slug: "purchase-orders",
-        path: "/inventory/purchase-orders",
+        title: "Feedback & Reviews",
+        slug: "feedback",
+        path: "/clients/feedback",
       },
     ],
   },
@@ -62,7 +69,7 @@ const menuItems = [
     title: "Inventory",
     slug: "inventory",
     path: "/inventory",
-    icon: faDashboard,
+    icon: faBoxesPacking,
     children: [
       {
         title: "Products",

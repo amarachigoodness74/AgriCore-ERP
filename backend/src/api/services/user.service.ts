@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { NextFunction } from 'express';
-import logger from '../../config/logger';
+import logger from '../utils/logger';
 import { CustomException } from '../utils/errors';
 
 const prisma = new PrismaClient();
 
 export const isUser = async (email: string, next: NextFunction) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.employee.findUnique({
       where: {
         email,
       },
@@ -21,7 +21,7 @@ export const isUser = async (email: string, next: NextFunction) => {
 
 export const getUser = async (email: string, next: NextFunction) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.employee.findUnique({
       where: {
         email,
       },
@@ -32,4 +32,3 @@ export const getUser = async (email: string, next: NextFunction) => {
     return next(new (CustomException as any)(500, 'Operation unsuccessful'));
   }
 };
-

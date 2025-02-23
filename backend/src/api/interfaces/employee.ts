@@ -14,8 +14,9 @@ export interface IEmployee {
   address: IAddress;
   department: string;
   role: string;
-  password: string;
-  mustResetPassword: boolean;
+  password?: string;
+  mustResetPassword?: boolean;
+  isActive?: boolean;
   resetToken?: String;
   resetTokenExpiry?: Date;
   createdBy: string;
@@ -29,7 +30,8 @@ export interface IEmployeeWithoutPasswordAndRole {
   gender: string;
   address: IAddress;
   department: string;
-  mustResetPassword: boolean;
+  mustResetPassword?: boolean;
+  isActive?: boolean;
   resetToken?: String;
   resetTokenExpiry?: Date;
   createdBy: string;

@@ -3,9 +3,10 @@ import compression from 'compression';
 import createError from 'http-errors';
 import cors from 'cors';
 import authRoute from './api/routes/auth.route';
-import corsOption from './config/corsOptions';
-import allowedOrigins from './config/allowedOrigins';
-import sessionConfig from './config/sessionConfig';
+import employeeRoute from './api/routes/employee.route';
+import corsOption from './api/utils/corsOptions';
+import allowedOrigins from './api/utils/allowedOrigins';
+import sessionConfig from './api/utils/sessionConfig';
 import { limiter } from './api/utils/rate-limiter';
 
 declare module 'express-session' {
@@ -31,7 +32,6 @@ app.use(cors<Request>(corsOption));
 app.use(compression());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 app.use(sessionConfig);
 
 app.get('/', async (req: Request, res: Response) => {
@@ -39,6 +39,7 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.use('/auth', authRoute);
+app.use('/api/employees', employeeRoute);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {

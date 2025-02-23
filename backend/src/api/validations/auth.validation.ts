@@ -19,13 +19,12 @@ export const resetPasswordValidation = () => [
 ];
 
 export const validate = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
+  const errors: any = validationResult(req);
   if (errors.isEmpty()) {
     return next();
   }
   res.status(422).json({
     status: 'error',
-    errors: errors.array(),
+    error: `Invalid value for ${errors.array()[0].path}`,
   });
-  return;
 };

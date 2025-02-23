@@ -25,7 +25,13 @@ AgriCore ERP is a robust and scalable Enterprise Resource Planning (ERP) system 
 - Payroll Integration
 - Performance Management
 
-3. Inventory Management (Already in Progress):
+3. Client Management:
+- Record and manage client profiles (name, contact, company details, including purchase history and preferences)
+- Invoices & Payments: Generate invoices and payment receipts
+- Client Support Tickets: Generate invoices and payment receipts
+- Feedback & Reviews
+
+4. Inventory Management (Already in Progress):
 - Product Stock Levels: 
   - Add, update, categorize, and search for products (equipment, parts, and tools).
   - Track stock levels in real-time with alerts for low or overstocked items.
@@ -40,12 +46,6 @@ AgriCore ERP is a robust and scalable Enterprise Resource Planning (ERP) system 
   - Track the status of orders (pending, approved, shipped, received).
   - Automatically update inventory upon order receipt.
 - Stock Movement History
-
-4. Client Management:
-- Record and manage client profiles (name, contact, company details, including purchase history and preferences)
-- Communication History (emails, calls): Track interactions, communications, and outstanding payments
-- Sales and Invoices: Generate invoices and payment receipts
-- Client Support Tickets: Generate invoices and payment receipts
 
 5. Sales and Order Management:
 - Quote and Invoice Creation: Generate detailed sales reports by product, client, or region.

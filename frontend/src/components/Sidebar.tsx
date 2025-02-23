@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import menuItems from "../utils/routes";
 
@@ -15,7 +15,9 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
         isMenuOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
     >
-      <h1 className="text-2xl font-bold mb-4">ERP Dashboard</h1>
+      <h1 className="text-purple-400 text-xl font-bold underline decoration-wavy underline-offset-8 mb-4">
+        AgriCore ERP
+      </h1>
       <nav>
         <ul>
           {menuItems.map((item, index) => (
@@ -34,9 +36,9 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
                     </Link>
                     <button onClick={() => toggleDropdown(item.title)}>
                       {openDropdown === item.title ? (
-                        <ChevronUp />
-                      ) : (
                         <ChevronDown />
+                      ) : (
+                        <ChevronRight />
                       )}
                     </button>
                   </div>

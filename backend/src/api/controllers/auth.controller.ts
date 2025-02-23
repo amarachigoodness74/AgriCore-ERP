@@ -3,10 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
 import config from 'config';
 import { omit } from 'lodash';
-import mail from '../services/mail.service';
 import { getUser } from '../services/user.service';
 import { IDecodedToken } from '../interfaces/token';
-import logger from '../../config/logger';
+import logger from '../utils/logger';
 import {
   verifyAccessToken,
   hashPassword,
@@ -15,6 +14,7 @@ import {
   generateTokens,
 } from '../utils/helpers';
 import { InvalidCredentialsException, CustomException } from '../utils/errors';
+import transporter from '../utils/emailSender';
 
 const prisma = new PrismaClient();
 
@@ -25,7 +25,7 @@ export const loginController = async (
 ) => {
   const { email, password } = req.body;
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.employee.findUnique({ where: { email } });
     if (!user) {
       logger.warn('Invalid login attempt', { email });
       return next(new (InvalidCredentialsException as any)());
@@ -66,7 +66,7 @@ export const loginController = async (
     });
     req.session.isAuthenticated = refreshToken;
 
-    const result = omit(user, ['password', 'role']);
+    const result = omit(user, ['password']);
     res.status(200).json({
       status: 'success',
       payload: result,
@@ -86,7 +86,7 @@ export const forgotPasswordController = async (
 ) => {
   const { email } = req.body;
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.employee.findUnique({
       where: {
         email,
       },
@@ -107,7 +107,7 @@ export const forgotPasswordController = async (
       .update(resetToken)
       .digest('hex');
 
-    await prisma.user.update({
+    await prisma.employee.update({
       where: { email },
       data: {
         resetToken: hashedToken,
@@ -115,16 +115,22 @@ export const forgotPasswordController = async (
       },
     });
 
-    const resetLink = `${config.get('environment.clientURL') as string}/reset-password?token=${resetToken}`;
-    const mailData = {
-      from: config.get('email.user') as string,
-      to: user.email,
-      subject: 'Reset Your Password',
-      html: `<b>Hey ${user.name},</b><br>This is the link to reset your password as requested: <a href="${resetLink}">${resetLink}</a>. This link expires in 15 minutes.`,
-    };
+    const clientUrl = config.get('environment.clientUrl') as string;
+    const resetLink = `${clientUrl}/reset-password?token=${hashedToken}`;
 
-    const mailSent = await mail(mailData, next);
-    if (!mailSent) {
+    const mailSent = await transporter.sendMail({
+      to: email,
+      subject: 'Reset Your Password',
+      html: `<b>Hi ${user.name},</b><br/><br/><p>You requested a password reset. Click <a href="${resetLink}">here</a> to reset your password. This link is valid for 15 minutes.</p> Or copy and paste link in your browser: ${resetLink}`,
+    });
+
+    if (mailSent.messageId) {
+      res.status(200).json({
+        status: 'success',
+        message:
+          'If the email exists in our system, you will receive a reset link shortly.',
+      });
+    } else {
       logger.error('Failed to send reset email', {
         email,
         reason: 'SMTP error or other issue',
@@ -136,12 +142,6 @@ export const forgotPasswordController = async (
         )
       );
     }
-
-    res.status(200).json({
-      status: 'success',
-      message:
-        'If the email exists in our system, you will receive a reset link shortly.',
-    });
   } catch (error) {
     logger.error('Error in forgotPasswordController', error);
     return next(
@@ -162,7 +162,7 @@ export const resetPasswordController = async (
   try {
     // Hash the received token to match the stored hashed token
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-    const user = await prisma.user.findFirst({
+    const user = await prisma.employee.findFirst({
       where: {
         resetToken: hashedToken,
         resetTokenExpiry: {
@@ -192,7 +192,7 @@ export const resetPasswordController = async (
     const hashedPassword = await hashPassword(password, next);
 
     // Update the user's password and remove the reset token and expiry
-    await prisma.user.update({
+    await prisma.employee.update({
       where: { id: user.id },
       data: {
         password: hashedPassword,
@@ -217,6 +217,29 @@ export const resetPasswordController = async (
   }
 };
 
+export const logoutController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  req.session.destroy(err => {
+    if (err) {
+      logger.error(err.message);
+      return next(new (CustomException as any)(500, 'Operation unsuccessful'));
+    }
+    // Clear session cookie with proper options
+    res.clearCookie('accessToken');
+    res.clearCookie('connect.sid', {
+      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
+    });
+    return res.status(200).json({
+      status: 'success',
+      message: 'Operation successful',
+    });
+  });
+};
+
 export const refreshTokenController = async (
   req: Request,
   res: Response,
@@ -237,7 +260,7 @@ export const refreshTokenController = async (
       return next(new (InvalidCredentialsException as any)());
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.employee.findUnique({
       where: { email: decodedToken.payload.email },
     });
     if (!user || !user.isActive) {
@@ -275,7 +298,7 @@ export const refreshTokenController = async (
   }
 };
 
-export const getSession = async (
+export const getSessionController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -309,28 +332,5 @@ export const getSession = async (
   res.status(200).json({
     status: 'success',
     payload: omit(user, ['password', 'role']),
-  });
-};
-
-export const logoutController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  req.session.destroy(err => {
-    if (err) {
-      logger.error(err.message);
-      return next(new (CustomException as any)(500, 'Operation unsuccessful'));
-    }
-    // Clear session cookie with proper options
-    res.clearCookie('accessToken');
-    res.clearCookie('connect.sid', {
-      httpOnly: process.env.NODE_ENV === 'production',
-      secure: process.env.NODE_ENV === 'production',
-    });
-    return res.status(200).json({
-      status: 'success',
-      message: 'Operation successful',
-    });
   });
 };

@@ -6,36 +6,35 @@ interface IAddress {
   country: string;
 }
 
-export interface IResetData {
-  token: string;
-  expiresOn: Date;
-}
-
 export interface IEmployeeWithoutPasswordAndRole {
   id: string;
   name: string;
   email: string;
   phone: string;
   gender: string;
-  address: IAddress;
+  address?: IAddress;
   department: string;
-  mustResetPassword: boolean;
-  passwordResetData?: IResetData;
+  mustResetPassword?: boolean;
+  resetToken?: string;
+  resetTokenExpiry?: Date;
   createdBy: string;
   updatedBy: string;
 }
 
 export interface IEmployee {
+  id: string;
   name: string;
   email: string;
   phone: string;
   gender: string;
-  address: IAddress;
+  address?: IAddress;
   department: string;
   role: string;
-  password: string;
-  mustResetPassword: boolean;
-  passwordResetData: IResetData;
-  createdBy: string;
-  updatedBy: string;
+  password?: string;
+  mustResetPassword?: boolean;
+  isActive?: boolean;
+  resetToken?: string;
+  resetTokenExpiry?: Date;
+  createdBy?: string;
+  updatedBy?: string;
 }

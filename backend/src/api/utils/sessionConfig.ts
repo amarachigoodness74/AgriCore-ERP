@@ -1,5 +1,5 @@
 import session from 'express-session';
-import MongoStore from 'connect-mongo';
+import MongoStore from 'connect-mongo'; // redis is best but used mongodb because of deployment
 import config from 'config';import dotenv from 'dotenv-safe';
 
 dotenv.config();
