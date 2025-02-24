@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import {
   Chart as ChartJS,
@@ -29,11 +29,11 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="min-h-screen bg-blue-gray-50/50">
       {/* Mobile Menu Toggle */}
       <button
         onClick={toggleMenu}
-        className="md:hidden absolute top-6 right-6 z-50 bg-gray-800 text-white p-2 rounded-md"
+        className="md:hidden absolute top-6 right-6 z-50 bg-blue-gray-50 text-white p-2 rounded-md"
       >
         <Menu size={24} />
       </button>
@@ -49,7 +49,7 @@ const DashboardLayout = () => {
       <Sidebar isMenuOpen={isMenuOpen} />
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="p-4 xl:ml-80">
         <Outlet />
       </div>
     </div>

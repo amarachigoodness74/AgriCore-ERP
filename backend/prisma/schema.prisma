@@ -13,8 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Employee {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+model Employees {
+  employee_id                String    @id @default(auto()) @map("_id") @db.ObjectId
   name              String
   email             String    @unique
   phone             String
@@ -39,8 +39,18 @@ type Address {
   country  String
 }
 
-model UserRole {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
+model UserRoles {
+  userrole_id    String @id @default(auto()) @map("_id") @db.ObjectId
   role  String
   value String
+}
+
+model Permissions {
+  permission_id    String @id @default(auto()) @map("_id") @db.ObjectId
+  permission  String
+}
+
+model RolePermissions {
+  userrole_id    String @id @default(auto()) @map("_id") @db.ObjectId
+  permission_id    String @id @default(auto()) @map("_id") @db.ObjectId
 }

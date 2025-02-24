@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,67 +11,83 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
   };
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-800 text-white flex flex-col p-4 transform ${
-        isMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
+      className={`bg-white shadow-sm fixed inset-0 z-50 m-4
+      h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300
+      xl:translate-x-0 border border-blue-gray-100 ${
+        isMenuOpen ? "translate-x-0" : "-translate-x-80"
+      }`}
     >
-      <h1 className="text-purple-400 text-xl font-bold underline decoration-wavy underline-offset-8 mb-4">
-        AgriCore ERP
-      </h1>
-      <nav>
-        <ul>
-          {menuItems.map((item, index) => (
-            <li key={index} className="mb-2">
-              {item.children ? (
-                <>
-                  <div className="flex items-center justify-between w-full px-3 py-2 rounded hover:bg-gray-700">
-                    <Link
-                      to={item.path as string}
-                      className="block px-3 py-2 rounded hover:bg-gray-700"
-                    >
-                      {item.icon && (
-                        <FontAwesomeIcon icon={item.icon} className="mr-2" />
-                      )}
+      <div className="relative py-6 px-8 text-center">
+        <h1 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900">
+          AgriCore ERP
+        </h1>
+      </div>
+      <div className="m-4">
+        <nav>
+          <ul className="mb-4 flex flex-col gap-1">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                {item.children ? (
+                  <>
+                    <div className="flex items-center justify-between w-full py-2 rounded hover:bg-blue-gray-500/10 ">
+                      <Link
+                        to={item.path as string}
+                        className="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
+                      >
+                        {item.icon && (
+                          <FontAwesomeIcon
+                            icon={item.icon}
+                            className="w-5 h-5 text-inherit"
+                          />
+                        )}
+                        <span className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                          {item.title}
+                        </span>
+                      </Link>
+                      <button onClick={() => toggleDropdown(item.title)}>
+                        {openDropdown === item.title ? (
+                          <ChevronDown />
+                        ) : (
+                          <ChevronRight />
+                        )}
+                      </button>
+                    </div>
+                    {openDropdown === item.title && (
+                      <ul className="ml-4 my-3 border-l border-gray-600">
+                        {item.children.map((subItem, subIndex) => (
+                          <li key={subIndex} className="mb-1">
+                            <Link
+                              to={subItem.path}
+                              className="block px-3 py-1 rounded  text-gray-400 hover:text-blue-gray-500"
+                            >
+                              {subItem.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    to={item.path as string}
+                    className="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
+                  >
+                    {item.icon && (
+                      <FontAwesomeIcon
+                        icon={item.icon}
+                        className="w-5 h-5 text-inherit"
+                      />
+                    )}
+                    <span className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                       {item.title}
-                    </Link>
-                    <button onClick={() => toggleDropdown(item.title)}>
-                      {openDropdown === item.title ? (
-                        <ChevronDown />
-                      ) : (
-                        <ChevronRight />
-                      )}
-                    </button>
-                  </div>
-                  {openDropdown === item.title && (
-                    <ul className="ml-4 mt-2 border-l border-gray-600">
-                      {item.children.map((subItem, subIndex) => (
-                        <li key={subIndex} className="mb-1">
-                          <Link
-                            to={subItem.path}
-                            className="block px-3 py-1 hover:bg-gray-700 rounded"
-                          >
-                            {subItem.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
-                <Link
-                  to={item.path as string}
-                  className="block px-3 py-2 rounded hover:bg-gray-700"
-                >
-                  {item.icon && (
-                    <FontAwesomeIcon icon={item.icon} className="mr-2" />
-                  )}
-                  {item.title}
-                </Link>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+                    </span>
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </aside>
   );
 };
