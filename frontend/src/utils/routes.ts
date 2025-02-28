@@ -1,6 +1,7 @@
 import {
   faBoxesPacking,
   faHome,
+  faUser,
   faUsers,
   faUsersRectangle,
   faUserTie,
@@ -12,6 +13,12 @@ const menuItems = [
     slug: "dashboard",
     path: "/dashboard",
     icon: faHome,
+  },
+  {
+    title: "Profile",
+    slug: "roles-permissions",
+    path: "/profile",
+    icon: faUser,
   },
   {
     title: "Roles and Permissions",

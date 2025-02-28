@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { NextFunction } from 'express';
-import logger from '../utils/logger';
-import { CustomException } from '../utils/errors';
+import logger from '../../shared/utils/logger';
+import { CustomException } from '../../shared/utils/errors';
 
 const prisma = new PrismaClient();
 

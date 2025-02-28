@@ -2,13 +2,13 @@ import { PrismaClient } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import { omit } from 'lodash';
 import config from 'config';
-import logger from '../utils/logger';
-import { isUser } from '../services/user.service';
-import { signAccessToken } from '../utils/helpers';
-import { CustomException } from '../utils/errors';
-import transporter from '../utils/emailSender';
-import { IEmployeeWithoutPasswordAndRole } from '../interfaces/employee';
-import { ICreateToken } from '../interfaces/token';
+import logger from '../../shared/utils/logger';
+import { isUser } from './employee.service';
+import { signAccessToken } from '../../shared/utils/helpers';
+import { CustomException } from '../../shared/utils/errors';
+import transporter from '../../shared/utils/emailSender';
+import { IEmployeeWithoutPasswordAndRole } from '../../shared/interfaces/employee';
+import { ICreateToken } from '../../shared/interfaces/token';
 
 const prisma = new PrismaClient();
 

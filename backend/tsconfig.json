@@ -5,11 +5,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
-    "rootDir": "./src",
+    "rootDir": "./src/v1",
     "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": "./src/v1",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/v1/*"]
     },
     "allowJs": true,
     "outDir": "./dist",
@@ -21,6 +21,6 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src", "config"],
+  "include": ["src/v1", "config"],
   "exclude": ["node_modules", "dist", "coverage"]
 }

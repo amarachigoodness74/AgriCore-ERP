@@ -1,11 +1,11 @@
 import * as express from 'express';
-import acountLimiter from '../middlewares/rateLimiterForRoutes';
+import acountLimiter from '../../shared/middlewares/rateLimiterForRoutes';
 import {
   loginValidation,
   forgetPasswordValidation,
   resetPasswordValidation,
   validate,
-} from '../validations/auth.validation';
+} from './auth.validation';
 import {
   loginController,
   forgotPasswordController,
@@ -13,7 +13,7 @@ import {
   refreshTokenController,
   logoutController,
   getSessionController,
-} from '../controllers/auth.controller';
+} from './auth.controller';
 
 const router = express.Router();
 

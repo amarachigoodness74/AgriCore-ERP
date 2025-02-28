@@ -13,15 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Permission {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  key         String @unique
+  description String
+  group       String
+}
+
+model UserRole {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  role        String   @unique
+  label       String   @unique
+  description String?
+  permissions String[]
+}
+
 model Employees {
-  employee_id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
   name              String
   email             String    @unique
   phone             String
   gender            String
   address           Address
   department        String
-  role              String
+  role              Role
   password          String?
   mustResetPassword Boolean
   isActive          Boolean
@@ -39,18 +55,7 @@ type Address {
   country  String
 }
 
-model UserRoles {
-  userrole_id    String @id @default(auto()) @map("_id") @db.ObjectId
+type Role {
+  label String
   role  String
-  value String
-}
-
-model Permissions {
-  permission_id    String @id @default(auto()) @map("_id") @db.ObjectId
-  permission  String
-}
-
-model RolePermissions {
-  userrole_id    String @id @default(auto()) @map("_id") @db.ObjectId
-  permission_id    String @id @default(auto()) @map("_id") @db.ObjectId
 }

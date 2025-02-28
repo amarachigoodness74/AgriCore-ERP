@@ -1,6 +1,6 @@
 import * as express from 'express';
-import acountLimiter from '../middlewares/rateLimiterForRoutes';
-import { validation, validate } from '../validations/employee.validation';
+import acountLimiter from '../../shared/middlewares/rateLimiterForRoutes';
+import { validation, validate } from './employee.validation';
 import {
   createEmployeeController,
   getEmployeesController,
@@ -8,8 +8,8 @@ import {
   countEmployeesController,
   updateEmployeeController,
   removeEmployeeController,
-} from '../controllers/employee.controller';
-import isAuthorized from '../middlewares/isAuthorized';
+} from './employee.controller';
+import isAuthorized from '../../shared/middlewares/isAuthorized';
 // import ROLES_LIST from '../../config/roles_list';
 
 const router = express.Router();

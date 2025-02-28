@@ -3,18 +3,21 @@ import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
 import config from 'config';
 import { omit } from 'lodash';
-import { getUser } from '../services/user.service';
-import { IDecodedToken } from '../interfaces/token';
-import logger from '../utils/logger';
+import { getUser } from '../employees/employee.service';
+import { IDecodedToken } from '../../shared/interfaces/token';
+import logger from '../../shared/utils/logger';
 import {
   verifyAccessToken,
   hashPassword,
   comparePassword,
   isStrongPassword,
   generateTokens,
-} from '../utils/helpers';
-import { InvalidCredentialsException, CustomException } from '../utils/errors';
-import transporter from '../utils/emailSender';
+} from '../../shared/utils/helpers';
+import {
+  InvalidCredentialsException,
+  CustomException,
+} from '../../shared/utils/errors';
+import transporter from '../../shared/utils/emailSender';
 
 const prisma = new PrismaClient();
 

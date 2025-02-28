@@ -2,12 +2,14 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import compression from 'compression';
 import createError from 'http-errors';
 import cors from 'cors';
-import authRoute from './api/routes/auth.route';
-import employeeRoute from './api/routes/employee.route';
-import corsOption from './api/utils/corsOptions';
-import allowedOrigins from './api/utils/allowedOrigins';
-import sessionConfig from './api/utils/sessionConfig';
-import { limiter } from './api/utils/rate-limiter';
+import permissionRoute from './modules/userRolePermissions/permission.route';
+import userRoleRoute from './modules/userRolePermissions/userRole.route';
+import authRoute from './modules/auth/auth.route';
+import employeeRoute from './modules/employees/employee.route';
+import corsOption from './shared/utils/corsOptions';
+import allowedOrigins from './shared/utils/allowedOrigins';
+import sessionConfig from './shared/utils/sessionConfig';
+import { limiter } from './shared//utils/rate-limiter';
 
 declare module 'express-session' {
   interface SessionData {
@@ -38,6 +40,8 @@ app.get('/', async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Awesome it works 🐻' });
 });
 
+app.use('/permissions', permissionRoute);
+app.use('/user-role', userRoleRoute);
 app.use('/auth', authRoute);
 app.use('/api/employees', employeeRoute);
 
