@@ -50,7 +50,9 @@ const DashboardLayout = () => {
 
       {/* Main Content */}
       <div className="p-4 xl:ml-80">
-        <Outlet />
+        <main className="flex-1 p-6 overflow-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

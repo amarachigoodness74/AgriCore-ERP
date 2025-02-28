@@ -87,13 +87,11 @@ const DashboardWithAuth = ({ authContext }: authProps) => {
   ];
 
   return (
-    <main className="overflow-auto">
-      {/* Header */}
-      <div className="mb-12">
-        <h2 className="text-3xl font-semibold text-blue-gray-900">Dashboard</h2>
-        <p className="text-blue-gray-500">Welcome back, Admin!</p>
-      </div>
-
+    <>
+      <header className="mb-6">
+        <h2 className="text-3xl font-semibold text-gray-800">Dashboard</h2>
+        <p className="text-gray-600">Welcome back, Admin!</p>
+      </header>
       {/* Charts */}
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 border border-blue-gray-100 shadow-sm">
@@ -423,7 +421,7 @@ const DashboardWithAuth = ({ authContext }: authProps) => {
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 };
 

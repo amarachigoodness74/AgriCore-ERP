@@ -3,6 +3,7 @@ import { useTable, useSortBy, usePagination } from "react-table";
 import { IEmployee } from "../../interfaces/employee";
 import { demoEmployees } from "../../demo-data/employees";
 import { Link } from "react-router-dom";
+import BreadCrumb from "../BreadCrumb";
 
 // const EmployeeTable: React.FC<{ employees: IEmployee[] }> = ({ employees }) => {
 const EmployeeTable: React.FC = () => {
@@ -41,10 +42,8 @@ const EmployeeTable: React.FC = () => {
   } = useTable({ columns, data: employees }, useSortBy, usePagination);
 
   return (
-    <main className="flex-1 bg-gray-100 p-6 overflow-auto">
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Employees</h2>
-      </div>
+    <>
+      <BreadCrumb page="Employees" />
       <div className="flex justify-end mb-5">
         <Link
           to="/employees/add"
@@ -53,40 +52,55 @@ const EmployeeTable: React.FC = () => {
           Add Employee
         </Link>
       </div>
-      <table {...getTableProps()} className="w-full border-collapse">
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()} className="bg-gray-200">
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="p-2 text-left cursor-pointer"
-                >
-                  {column.render("Header")}{" "}
-                  {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()} className="hover:bg-gray-100">
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className="p-2"
+      <div className="my-12 relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+        <table
+          {...getTableProps()}
+          className="w-full border-collapse table-auto"
+        >
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                className="bg-gray-200"
+              >
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="cursor-pointer border-b border-blue-gray-50 py-3 px-6 text-left"
                   >
-                    {cell.render("Cell")}
-                  </td>
+                    {column.render("Header")}{" "}
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? " 🔽"
+                        : " 🔼"
+                      : ""}
+                  </th>
                 ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className="hover:bg-gray-100 text-sm"
+                >
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      className="py-3 px-5 border-b border-blue-gray-50"
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={previousPage}
@@ -106,7 +120,7 @@ const EmployeeTable: React.FC = () => {
           Next
         </button>
       </div>
-    </main>
+    </>
   );
 };
 

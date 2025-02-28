@@ -16,7 +16,7 @@ const menuItems = [
   },
   {
     title: "Profile",
-    slug: "roles-permissions",
+    slug: "profile",
     path: "/profile",
     icon: faUser,
   },
@@ -28,10 +28,13 @@ const menuItems = [
   },
   {
     title: "Employees",
-    slug: "employees",
-    path: "/employees",
     icon: faUsers,
     children: [
+      {
+        title: "Employees",
+        slug: "employees",
+        path: "/employees",
+      },
       {
         title: "Attendance Records",
         slug: "attendance",
@@ -51,10 +54,13 @@ const menuItems = [
   },
   {
     title: "Clients",
-    slug: "clients",
-    path: "/clients",
     icon: faUsersRectangle,
     children: [
+      {
+        title: "Clients",
+        slug: "clients",
+        path: "/clients",
+      },
       {
         title: "Invoices & Payments",
         slug: "invoices",
@@ -74,10 +80,13 @@ const menuItems = [
   },
   {
     title: "Inventory",
-    slug: "inventory",
-    path: "/inventory",
     icon: faBoxesPacking,
     children: [
+      {
+        title: "Inventory",
+        slug: "inventory",
+        path: "/inventory",
+      },
       {
         title: "Products",
         slug: "products",

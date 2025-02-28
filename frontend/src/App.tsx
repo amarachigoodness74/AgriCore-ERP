@@ -15,6 +15,7 @@ const ResetPasswordPage = lazy(() =>
 
 const Dashboard = lazy(() => reloadOnFail(() => import("./pages/Dashboard")));
 const UserRole = lazy(() => reloadOnFail(() => import("./pages/UserRole")));
+const Profile = lazy(() => reloadOnFail(() => import("./pages/Profile")));
 
 // Employee Management Routes
 const Employees = lazy(() =>
@@ -52,7 +53,7 @@ const App = () => {
       </Suspense>
       <Routes>
         <Route
-          path="/"
+          // path="/"
           // element={
           //   <RequireAuth>
           //     <DashboardLayout />
@@ -62,6 +63,8 @@ const App = () => {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="user-role" element={<UserRole />} />
+          <Route path="profile" element={<Profile />} />
+
           {/* Employee Management Routes */}
           <Route path="employees" element={<Employees />} />
           <Route path="employees/add" element={<AddEmployee />} />
@@ -69,7 +72,7 @@ const App = () => {
           {/* <Route path="employees/attendance" element={<AddEmployee />} />
           <Route path="employees/performance" element={<AddEmployee />} />
           <Route path="employees/payroll" element={<AddEmployee />} /> */}
-
+          
           {/* Inventory Management Routes */}
           <Route path="inventory/" element={<Dashboard />} />
           <Route path="inventory/products" element={<ProductList />} />

@@ -17,9 +17,9 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
         isMenuOpen ? "translate-x-0" : "-translate-x-80"
       }`}
     >
-      <div className="relative py-6 px-8 text-center">
-        <h1 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900">
-          AgriCore ERP
+      <div className="relative py-6 px-6 text-center">
+        <h1 className="block antialiased tracking-normal font-sans text-xl font-bold leading-relaxed text-blue-gray-900">
+          AGRICORE ERP
         </h1>
       </div>
       <div className="m-4">
@@ -30,9 +30,9 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
                 {item.children ? (
                   <>
                     <div className="flex items-center justify-between w-full py-2 rounded hover:bg-blue-gray-500/10 ">
-                      <Link
-                        to={item.path as string}
-                        className="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
+                      <button
+                        onClick={() => toggleDropdown(item.title)}
+                        className="cursor-pointer align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
                       >
                         {item.icon && (
                           <FontAwesomeIcon
@@ -43,8 +43,8 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
                         <span className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                           {item.title}
                         </span>
-                      </Link>
-                      <button onClick={() => toggleDropdown(item.title)}>
+                      </button>
+                      <button>
                         {openDropdown === item.title ? (
                           <ChevronDown />
                         ) : (

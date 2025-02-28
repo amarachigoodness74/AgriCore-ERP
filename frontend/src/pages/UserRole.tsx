@@ -1,33 +1,8 @@
 import React from "react";
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBox,
-  faShoppingCart,
-  faTruck,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
 import { withAuthContext } from "../context/auth/AuthContext";
-import DashboardLayout from "../layouts/Dashboard";
 import { IAuthContextType } from "../interfaces/authContext";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { SquarePen, Trash2 } from "lucide-react";
+import BreadCrumb from "../components/BreadCrumb";
 
 type authProps = {
   authContext: IAuthContextType;
@@ -35,167 +10,232 @@ type authProps = {
 
 const DashboardWithAuth = ({ authContext }: authProps) => {
   console.log("============", authContext);
-  const barChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Sales",
-        data: [120, 190, 300, 250, 220, 400],
-        backgroundColor: "rgba(93, 102, 255, 0.8)",
-      },
-    ],
-  };
-
-  const barChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Monthly Sales Overview",
-      },
-    },
-  };
 
   const tableData = [
-    { id: 1, name: "Product A", sales: 150, revenue: "$450" },
-    { id: 2, name: "Product B", sales: 200, revenue: "$600" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
+    {
+      id: 1,
+      role: "Product A",
+      // members: 150,
+      description:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis perferendis cumque molestiae",
+    },
+    {
+      id: 2,
+      role: "Product B",
+      // members: 200,
+      description:
+        "Klie recusandae sit quidem eum excepturi asperiores sint tempore",
+    },
+    {
+      id: 3,
+      role: "Product C",
+      // members: 120,
+      description:
+        "Quis perferendis cumque molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+    },
   ];
 
-  const totalProducts = 5,
-    pendingOrders = 12,
-    totalSuppliers = 17,
-    totalClients = 10;
-  // revenue = 18;
-
   return (
-    <main className="flex-1 bg-gray-100 p-6 overflow-auto">
-      {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-3xl font-semibold text-gray-800">Dashboard</h2>
-        <p className="text-gray-600">Welcome back, Admin!</p>
-      </div>
-
-      {/* Charts */}
-      <div className="py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white shadow-md rounded-lg p-4 flex justify-between">
-            <FontAwesomeIcon
-              icon={faBox}
-              className="text-4xl text-blue-500 mr-4"
-            />
-            <div className="flex flex-col justify-between items-end">
-              <h2 className="text-sm font-medium text-gray-600">
-                Total Products in Inventory
-              </h2>
-              <p className="text-3xl font-bold text-gray-800 mt-2">
-                {totalProducts}
-              </p>
-            </div>
-          </div>
-          <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
-            <FontAwesomeIcon
-              icon={faShoppingCart}
-              className="text-4xl text-yellow-500 mr-4"
-            />
-            <div>
-              <h2 className="text-lg font-medium text-gray-600">
-                Pending Orders
-              </h2>
-              <p className="text-3xl font-bold text-yellow-500 mt-2">
-                {pendingOrders}
-              </p>
-            </div>
-          </div>
-          <div className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
-            <FontAwesomeIcon
-              icon={faTruck}
-              className="text-4xl text-green-500 mr-4"
-            />
-            <div>
-              <h2 className="text-xs font-medium text-gray-600">
-                Total Suppliers
-              </h2>
-              <p className="text-3xl font-bold text-gray-800 mt-2">
-                {totalSuppliers}
-              </p>
-            </div>
-          </div>
-          <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
-            <FontAwesomeIcon
-              icon={faUsers}
-              className="text-4xl text-purple-500 mr-4"
-            />
-            <div>
-              <h2 className="text-lg font-medium text-gray-600">
-                Total Clients
-              </h2>
-              <p className="text-3xl font-bold text-gray-800 mt-2">
-                {totalClients}
-              </p>
-            </div>
-          </div>
-          {/* <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
-              <FontAwesomeIcon
-                icon={faDollarSign}
-                className="text-4xl text-green-500 mr-4"
-              />
-              <div>
-                <h2 className="text-lg font-medium text-gray-600">
-                  Revenue (Month-to-Date)
-                </h2>
-                <p className="text-3xl font-bold text-green-500 mt-2">
-                  ${revenue.toLocaleString()}
-                </p>
-              </div>
-            </div> */}
+    <>
+     <BreadCrumb page="User Role" />
+      {/* Table */}
+      <div className="my-12 relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+        <div className="relative bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-gray-900 to-gray-800 text-white shadow-gray-900/20 shadow-lg -mt-6 mb-8 p-6">
+          <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">
+            User Roles
+          </h6>
         </div>
-      </div>
-
-      {/* Charts and Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Bar Chart */}
-        <div className="bg-white p-4 rounded-md shadow-md">
-          <Bar data={barChartData} options={barChartOptions} />
-        </div>
-
-        {/* Placeholder for Other Stats */}
-        <div className="bg-white p-4 rounded-md shadow-md flex items-center justify-center">
-          <h3 className="text-gray-500">Additional Stats</h3>
+        <div className="mb-4">
+          <div className="flex justify-end mb-8 mr-4">
+            <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+              Create User Role
+            </button>
+          </div>
+          <div className="relative flex flex-col bg-clip-border bg-white text-gray-700 overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
+            <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
+              <table className="w-full min-w-[640px] table-auto">
+                <thead>
+                  <tr>
+                    <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        #
+                      </p>
+                    </th>
+                    <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        Role
+                      </p>
+                    </th>
+                    <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        Members
+                      </p>
+                    </th>
+                    <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        Description
+                      </p>
+                    </th>
+                    <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        Actions
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((item) => (
+                    <tr key={item.id} className="text-sm">
+                      <td className="py-3 px-5 border-b border-blue-gray-50">
+                        {item.id}
+                      </td>
+                      <td className="py-3 px-5 border-b border-blue-gray-50">
+                        {item.role}
+                      </td>
+                      <td className="py-3 px-5 border-b border-blue-gray-50">
+                        <img
+                          src="/material-tailwind-dashboard-react/img/team-1.jpeg"
+                          alt="Romina Hadid"
+                          className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white"
+                        />
+                        <img
+                          src="/material-tailwind-dashboard-react/img/team-2.jpeg"
+                          alt="Ryan Tompson"
+                          className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white -ml-2.5"
+                        />
+                        <img
+                          src="/material-tailwind-dashboard-react/img/team-3.jpeg"
+                          alt="Jessica Doe"
+                          className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white -ml-2.5"
+                        />
+                        <img
+                          src="/material-tailwind-dashboard-react/img/team-4.jpeg"
+                          alt="Alexander Smith"
+                          className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white -ml-2.5"
+                        />
+                      </td>
+                      <td className="py-3 px-5 border-b border-blue-gray-50">
+                        {item.description}
+                      </td>
+                      <td className="py-3 px-5 border-b border-blue-gray-50">
+                        <div className="flex justify-center items-center gap-4">
+                          <span className="text-blue-600 hover:text-blue-800 transition duration-300 cursor-pointer">
+                            <SquarePen />
+                          </span>
+                          <span className="text-red-600 hover:text-red-800 transition duration-300 cursor-pointer">
+                            <Trash2 />
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white p-4 rounded-md shadow-md">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">
-          Recent Sales
-        </h3>
-        <table className="w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-gray-200 text-left text-sm text-gray-600">
-              <th className="p-2">#</th>
-              <th className="p-2">Product</th>
-              <th className="p-2">Sales</th>
-              <th className="p-2">Revenue</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData.map((item) => (
-              <tr key={item.id} className="border-t text-sm">
-                <td className="p-2">{item.id}</td>
-                <td className="p-2">{item.name}</td>
-                <td className="p-2">{item.sales}</td>
-                <td className="p-2">{item.revenue}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="mt-24">
+        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+          <div className="relative bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-gray-900 to-gray-800 text-white shadow-gray-900/20 shadow-lg -mt-6 mb-8 p-6">
+            <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">
+              Permissions
+            </h6>
+          </div>
+          <div className="mb-4">
+            <div className="flex justify-end mb-8 mr-4">
+              <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                Create Permission
+              </button>
+            </div>
+            <div className="relative flex flex-col bg-clip-border bg-white text-gray-700 overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
+              <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
+                <table className="w-full min-w-[640px] table-auto">
+                  <thead>
+                    <tr>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                          #
+                        </p>
+                      </th>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                          Role
+                        </p>
+                      </th>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                          Members
+                        </p>
+                      </th>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                          Description
+                        </p>
+                      </th>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                          Actions
+                        </p>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableData.map((item) => (
+                      <tr key={item.id} className="text-sm">
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          {item.id}
+                        </td>
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          {item.role}
+                        </td>
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          <img
+                            src="/material-tailwind-dashboard-react/img/team-1.jpeg"
+                            alt="Romina Hadid"
+                            className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white"
+                          />
+                          <img
+                            src="/material-tailwind-dashboard-react/img/team-2.jpeg"
+                            alt="Ryan Tompson"
+                            className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white -ml-2.5"
+                          />
+                          <img
+                            src="/material-tailwind-dashboard-react/img/team-3.jpeg"
+                            alt="Jessica Doe"
+                            className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white -ml-2.5"
+                          />
+                          <img
+                            src="/material-tailwind-dashboard-react/img/team-4.jpeg"
+                            alt="Alexander Smith"
+                            className="inline-block relative object-cover object-center !rounded-full w-6 h-6 rounded-md cursor-pointer border-2 border-white -ml-2.5"
+                          />
+                        </td>
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          {item.description}
+                        </td>
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          <div className="flex justify-center items-center gap-4">
+                            <span className="text-blue-600 hover:text-blue-800 transition duration-300 cursor-pointer">
+                              <SquarePen />
+                            </span>
+                            <span className="text-red-600 hover:text-red-800 transition duration-300 cursor-pointer">
+                              <Trash2 />
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* <Outlet /> */}
-    </main>
+    </>
   );
 };
 
