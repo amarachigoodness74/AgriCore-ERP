@@ -1,15 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { withAuthContext } from "../context/auth/AuthContext";
 import { IAuthContextType } from "../interfaces/authContext";
 import { SquarePen, Trash2 } from "lucide-react";
 import BreadCrumb from "../components/BreadCrumb";
+import { IPermission, IUserRole } from "../interfaces";
+import CircularLoader from "../components/Loaders/Circular";
 
 type authProps = {
   authContext: IAuthContextType;
 };
 
-const DashboardWithAuth = ({ authContext }: authProps) => {
+const UserRoleWithAuth = ({ authContext }: authProps) => {
   console.log("============", authContext);
+
+  const [permissions, setPermissions] = useState<IPermission[]>([]);
+  const [userRoles, setUserRoles] = useState<IUserRole[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [permissionsRes, userRolesRes] = await Promise.all([
+          axios.get<IPermission[]>("/permissions"),
+          axios.get<IUserRole[]>("/user-role"),
+        ]);
+
+        setPermissions(permissionsRes.data);
+        setUserRoles(userRolesRes.data);
+      } catch (err) {
+        setError("Failed to load data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading)
+    return (
+      <p className="text-center text-gray-500">
+        <CircularLoader />
+      </p>
+    );
+  if (error) return <p className="text-center text-red-500">{error}</p>;
+
+  console.log("========= permissions", permissions);
+  console.log("========= userRoles", userRoles);
 
   const tableData = [
     {
@@ -37,7 +77,7 @@ const DashboardWithAuth = ({ authContext }: authProps) => {
 
   return (
     <>
-     <BreadCrumb page="User Role" />
+      <BreadCrumb page="User Role" />
       {/* Table */}
       <div className="my-12 relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
         <div className="relative bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-gray-900 to-gray-800 text-white shadow-gray-900/20 shadow-lg -mt-6 mb-8 p-6">
@@ -239,6 +279,6 @@ const DashboardWithAuth = ({ authContext }: authProps) => {
   );
 };
 
-const Dashboard = withAuthContext(DashboardWithAuth);
+const UserRole = withAuthContext(UserRoleWithAuth);
 
-export default Dashboard;
+export default UserRole;
