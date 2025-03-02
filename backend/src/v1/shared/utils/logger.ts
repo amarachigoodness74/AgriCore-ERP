@@ -3,7 +3,7 @@ import winston from 'winston';
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
-  defaultMeta: { service: 'demco-erp-api' },
+  defaultMeta: { service: 'agricoreERP-api' },
   transports: [
     //
     // - Write all logs with level `error` and below to `error.log`

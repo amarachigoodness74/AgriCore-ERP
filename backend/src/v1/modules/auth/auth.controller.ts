@@ -54,7 +54,10 @@ export const loginController = async (
     }
 
     // Generate tokens
-    const employeeInfo = { email: user.email, role: user.role };
+    const employeeInfo: { email: string; role: string } = {
+      email: user.email,
+      role: user.role.role,
+    };
     const { accessToken, refreshToken } = await generateTokens(
       employeeInfo,
       true,
@@ -272,7 +275,7 @@ export const refreshTokenController = async (
     }
 
     // Generate tokens
-    const employeeInfo = { email: user.email, role: user.role };
+    const employeeInfo = { email: user.email, role: user.role.role };
     const { accessToken, refreshToken } = await generateTokens(
       employeeInfo,
       true,

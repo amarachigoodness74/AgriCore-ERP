@@ -14,9 +14,7 @@ export const createUserRoleController = async (
   try {
     const userRole = await prisma.userRole.findUnique({ where: { label } });
     if (userRole) {
-      return next(
-        new (CustomException as any)(400, 'UserRole already exist')
-      );
+      return next(new (CustomException as any)(400, 'UserRole already exist'));
     }
 
     await prisma.userRole.create({
@@ -50,9 +48,19 @@ export const getUserRolesController = async (
 ) => {
   try {
     const allUserRoles = await prisma.userRole.findMany();
+
+    // Fetch permissions for each role
+    const userRolesWithPermissions = await Promise.all(
+      allUserRoles.map(async role => {
+        const permissions = await prisma.permission.findMany({
+          where: { id: { in: role.permissions } },
+        });
+        return { ...role, permissions }; // Replace IDs with actual permissions
+      })
+    );
     res.status(200).json({
       status: 'success',
-      payload: allUserRoles,
+      payload: userRolesWithPermissions,
       message: 'Operation successful',
     });
     return;

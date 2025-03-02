@@ -1,0 +1,149 @@
+import { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { UserRoleType, IPermission } from "../interfaces/types";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+const PermissionSchema = Yup.object().shape({
+  key: Yup.string().required("Key is required"),
+  name: Yup.string().required("Name is required"),
+  description: Yup.string(),
+  group: Yup.mixed<UserRoleType>()
+    .oneOf(Object.values(UserRoleType), "Invalid group selection")
+    .required("Group is required"),
+});
+
+const PermissionForm = ({ initialData }: { initialData?: IPermission }) => {
+  const [error, setError] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (msg) {
+      const timer = setTimeout(() => {
+        setMsg(null);
+        setError(null);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [msg, error]);
+
+  return (
+    <div className="max-w-full mx-auto bg-white p-6 rounded-lg shadow-md">
+      <Formik
+        initialValues={{
+          key: initialData?.key || "",
+          name: initialData?.name || "",
+          description: initialData?.description || "",
+          group: initialData?.group || ("" as UserRoleType),
+        }}
+        validationSchema={PermissionSchema}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          try {
+            await axios.post(`${API_URL}/permissions`, values);
+            setMsg("Permission created successfully!");
+            resetForm();
+          } catch (error) {
+            setError("Failed to create role");
+          }
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="space-y-12">
+            <div>
+              <label className="block text-gray-600">Key</label>
+              <Field
+                type="text"
+                name="key"
+                className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+                placeholder="Enter key"
+              />
+              <ErrorMessage
+                name="key"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Name</label>
+              <Field
+                type="text"
+                name="name"
+                className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+                placeholder="Enter name"
+              />
+              <ErrorMessage
+                name="name"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Description</label>
+              <Field
+                as="textarea"
+                name="description"
+                className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+                placeholder="Enter description"
+                rows={3}
+              />
+              <ErrorMessage
+                name="description"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Group</label>
+              <Field
+                as="select"
+                name="group"
+                className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+              >
+                <option value="">Select a group</option>
+                {Object.values(UserRoleType).map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage
+                name="group"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+
+            {error && (
+              <div className="text-center font-bold mt-1 bg-red-200 text-red-700 text-sm p-4 rounded-lg">
+                <p>{error}</p>
+              </div>
+            )}
+
+            {msg && (
+              <div className="text-center font-bold mt-1 bg-green-200 text-green-700 text-sm p-4 rounded-lg">
+                <p>{msg}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export default PermissionForm;

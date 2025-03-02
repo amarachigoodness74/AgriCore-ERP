@@ -33,14 +33,14 @@ const DashboardLayout = () => {
       {/* Mobile Menu Toggle */}
       <button
         onClick={toggleMenu}
-        className="md:hidden absolute top-6 right-6 z-50 bg-blue-gray-50 text-white p-2 rounded-md"
+        className="lg:hidden absolute top-6 right-6 z-50 bg-blue-gray-50 text-white p-2 rounded-md"
       >
         <Menu size={24} />
       </button>
       {/* Overlay for mobile menu */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
           onClick={toggleMenu}
         ></div>
       )}
@@ -49,7 +49,7 @@ const DashboardLayout = () => {
       <Sidebar isMenuOpen={isMenuOpen} />
 
       {/* Main Content */}
-      <div className="p-4 xl:ml-80">
+      <div className="p-4 lg:ml-80">
         <main className="flex-1 p-6 overflow-auto">
           <Outlet />
         </main>

@@ -37,7 +37,7 @@ export const createEmployeeController = async (
     const createToken: ICreateToken = {
       employeeInfo: {
         email: result.email,
-        role: result.role,
+        role: result.role.role,
       },
       isRefreshToken: false,
     };
@@ -188,7 +188,6 @@ export const removeEmployeeController = async (
         mustResetPassword: true,
         resetToken: null,
         resetTokenExpiry: null,
-        password: null,
         updatedBy: req.body.currentUserId,
       },
     });

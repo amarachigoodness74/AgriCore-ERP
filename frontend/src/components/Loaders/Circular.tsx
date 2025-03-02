@@ -10,7 +10,7 @@ const CircularLoader: React.FC<CircularLoaderProps> = ({
   color = "text-purple-500",
 }) => {
   return (
-    <div className={`flex items-center justify-center`}>
+    <div className={`h-screen flex items-center justify-center`}>
       <div
         className={`${size} border-4 border-t-transparent ${color} rounded-full animate-spin`}
         role="status"

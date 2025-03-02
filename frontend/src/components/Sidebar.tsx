@@ -13,7 +13,7 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
     <aside
       className={`bg-white shadow-sm fixed inset-0 z-50 m-4
       h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300
-      xl:translate-x-0 border border-blue-gray-100 ${
+      lg:translate-x-0 border border-blue-gray-100 ${
         isMenuOpen ? "translate-x-0" : "-translate-x-80"
       }`}
     >

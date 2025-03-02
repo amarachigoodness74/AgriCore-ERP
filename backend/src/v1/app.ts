@@ -43,7 +43,7 @@ app.get('/', async (req: Request, res: Response) => {
 app.use('/permissions', permissionRoute);
 app.use('/user-role', userRoleRoute);
 app.use('/auth', authRoute);
-app.use('/api/employees', employeeRoute);
+app.use('/employees', employeeRoute);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
