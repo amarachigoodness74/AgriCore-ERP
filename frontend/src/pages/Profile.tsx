@@ -1,7 +1,7 @@
 import React from "react";
 import BreadCrumb from "../components/BreadCrumb";
 
-const Profile = () => {
+const Profile: React.FC = () => {
   return (
     <>
       <BreadCrumb page="Profile" />

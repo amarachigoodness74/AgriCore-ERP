@@ -28,7 +28,7 @@ export const createUserRoleController = async (
 
     res.status(200).json({
       status: 'success',
-      message: 'UserRole added',
+      message: 'Role created successfully',
     });
   } catch (error) {
     logger.error('Error in createUserRoleController', error);

@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import AuthLayout from "../layouts/Auth";
 import ThreeDotsLoader from "../components/Loaders/ThreeDots";
 import { postOrPutData } from "../utils/apiRequests";
+import { Link } from "react-router-dom";
 
 const ForgotPasswordSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -99,6 +100,14 @@ const ForgotPassword: React.FC = () => {
                   "Forgot Password"
                 )}
               </button>
+              <div className="text-right text-sm mt-4">
+                <Link
+                  to="/"
+                  className="text-blue-500 cursor-pointer hover:underline"
+                >
+                  Login here
+                </Link>
+              </div>
             </div>
           </Form>
         )}

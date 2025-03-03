@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 import { AuthContext } from "./AuthContext";
@@ -55,7 +55,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     logout: handleLogout,
     refreshSession: checkSession, // Allows re-fetching session manually
   };
-
 
   // Don't render children until session check completes
   if (loading) return <CircularLoader />;

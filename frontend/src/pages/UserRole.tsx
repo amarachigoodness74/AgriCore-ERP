@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { withAuthContext } from "../context/auth/AuthContext";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { SquarePen, Trash2 } from "lucide-react";
+import { withAuthContext } from "../context/auth/AuthContext";
 import BreadCrumb from "../components/BreadCrumb";
 import CircularLoader from "../components/Loaders/Circular";
 import Modal from "../components/Modal";
 import { IPermission, IUserRole } from "../interfaces/types";
 import { IAuthContextType } from "../interfaces/authContext";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { getData } from "../utils/apiRequests";
 
 type authProps = {
   authContext: IAuthContextType;
@@ -17,45 +16,44 @@ type authProps = {
 const UserRoleWithAuth = ({ authContext }: authProps) => {
   console.log("============", authContext);
 
+  const {
+    data: permissions,
+    error: permissionsError,
+    isLoading: permissionsLoading,
+  } = useQuery({
+    queryKey: ["permissions"],
+    queryFn: () => getData("permissions"),
+  });
+
+  const {
+    data: userRoles,
+    error: userRolesError,
+    isLoading: userRolesLoading,
+  } = useQuery({
+    queryKey: ["userRoles"],
+    queryFn: () => getData("user-role"),
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formType, setFormType] = useState("");
   const [selectedData, setSelectedData] = useState<
     IPermission | IUserRole | null
   >(null);
-  const [permissions, setPermissions] = useState<IPermission[]>([]);
-  const [userRoles, setUserRoles] = useState<IUserRole[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setLoading(true);
-    const fetchData = async () => {
-      try {
-        const [permissionsRes, userRolesRes] = await Promise.all([
-          axios.get(`${API_URL}/permissions`),
-          axios.get(`${API_URL}/user-role`),
-        ]);
-
-        setPermissions(permissionsRes.data.payload);
-        setUserRoles(userRolesRes.data.payload);
-      } catch (err) {
-        setError("Failed to load data");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [isModalOpen]);
-
-  if (loading)
+  if (permissionsLoading || userRolesLoading)
     return (
       <p className="text-center text-gray-500">
         <CircularLoader />
       </p>
     );
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+
+  if (permissionsError)
+    return (
+      <p className="text-red-500">{(permissionsError as Error).message}</p>
+    );
+
+  if (userRolesError)
+    return <p className="text-red-500">{(userRolesError as Error).message}</p>;
 
   const openModal = (
     type: string,
@@ -65,6 +63,9 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
     setSelectedData(data);
     setIsModalOpen(true);
   };
+
+  console.log("======= permissions", permissions.payload);
+  console.log("======= userRoles", userRoles.payload);
 
   return (
     <>
@@ -113,8 +114,9 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {userRoles.length > 0 &&
-                    userRoles.map((userRole: IUserRole) => (
+                  {userRoles &&
+                    userRoles.payload.length > 0 &&
+                    userRoles.payload.map((userRole: IUserRole) => (
                       <tr key={userRole.id} className="text-sm">
                         <td className="py-3 px-5 border-b border-blue-gray-50">
                           {userRole.role}
@@ -217,8 +219,9 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {permissions.length > 0 &&
-                      permissions.map((permission: IPermission) => (
+                    {permissions &&
+                      permissions.payload.length > 0 &&
+                      permissions.payload.map((permission: IPermission) => (
                         <tr key={permission?.id} className="text-sm">
                           <td className="py-3 px-5 border-b border-blue-gray-50">
                             {permission.name}
@@ -261,9 +264,10 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
       {/* Modal Component */}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        close={() => setIsModalOpen(false)}
         formType={formType}
-        initialData={selectedData}
+        initialData={selectedData as IPermission | IUserRole | undefined}
+        permissions={permissions.payload}
       />
     </>
   );

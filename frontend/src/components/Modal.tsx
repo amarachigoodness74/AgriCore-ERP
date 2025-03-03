@@ -1,20 +1,26 @@
 import UserRoleForm from "./UserRoleForm";
 import PermissionForm from "./PermissionForm";
 import DeleteConfirmation from "./DeleteConfirmation";
-import { IPermission, IUserRole } from "../interfaces/types";
+import { IPermission, IPermissionIRole, IUserRole } from "../interfaces/types";
 
 const Modal = ({
   isOpen,
-  onClose,
+  close,
   formType,
   initialData,
+  permissions,
 }: {
   isOpen: boolean;
-  onClose: () => void;
+  close: () => void;
   formType: string;
   initialData?: IPermission | IUserRole;
+  permissions: IPermissionIRole[];
 }) => {
   if (!isOpen) return null;
+
+  const handleClose = () => {
+    close();
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -26,31 +32,37 @@ const Modal = ({
             </h2>
           )}
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="bg-gray-300 text-gray-800 hover:bg-gray-400 py-1 px-2"
           >
             &times;
           </button>
         </div>
         <div className="py-4">
-          {formType === "create-user-role" && <UserRoleForm />}
+          {formType === "create-user-role" && (
+            <UserRoleForm permissions={permissions} />
+          )}
           {formType === "create-permission" && <PermissionForm />}
           {formType === "edit-permission" && (
             <PermissionForm initialData={initialData as IPermission} />
           )}
           {formType === "edit-user-role" && (
-            <UserRoleForm initialData={initialData as IUserRole} />
+            <UserRoleForm
+              initialData={initialData as IUserRole}
+              permissions={permissions}
+            />
           )}
           {(formType === "delete-permission" ||
             formType === "delete-user-role") && (
             <DeleteConfirmation
-              initialData={initialData as IPermission | IUserRole}
+              initialData={initialData as IPermissionIRole}
+              close={() => handleClose()}
             />
           )}
         </div>
         <div className="flex justify-end mt-4">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
           >
             Close

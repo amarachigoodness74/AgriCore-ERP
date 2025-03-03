@@ -30,7 +30,7 @@ export const createPermissionController = async (
 
     res.status(200).json({
       status: 'success',
-      message: 'Permission added',
+      message: 'Permission created successfully',
     });
   } catch (error) {
     logger.error('Error in createPermissionController', error);

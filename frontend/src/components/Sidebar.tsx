@@ -46,9 +46,13 @@ const Sidebar = ({ isMenuOpen }: { isMenuOpen: boolean }) => {
                       </button>
                       <button>
                         {openDropdown === item.title ? (
-                          <ChevronDown />
+                          <ChevronDown
+                            onClick={() => toggleDropdown(item.title)}
+                          />
                         ) : (
-                          <ChevronRight />
+                          <ChevronRight
+                            onClick={() => toggleDropdown(item.title)}
+                          />
                         )}
                       </button>
                     </div>

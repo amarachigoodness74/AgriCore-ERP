@@ -1,5 +1,7 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoadingIndicator from "./components/Loaders/Circular";
 import reloadOnFail from "./utils/reloadOnFail";
 import DashboardLayout from "./layouts/Dashboard";
@@ -42,54 +44,58 @@ const PurchaseOrderList = lazy(() =>
 );
 
 const App = () => {
+  const [queryClient] = useState(() => new QueryClient());
+  
   return (
     <React.StrictMode>
-      <Suspense fallback={<LoadingIndicator />}>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<LoadingIndicator />}>
+          <Routes>
+            <Route path="/" element={<SignInPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+          </Routes>
+        </Suspense>
         <Routes>
-          <Route path="/" element={<SignInPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-        </Routes>
-      </Suspense>
-      <Routes>
-        <Route
-          // path="/"
-          // element={
-          //   <RequireAuth>
-          //     <DashboardLayout />
-          //   </RequireAuth>
-          // }
-          element={<DashboardLayout />}
-        >
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="user-role" element={<UserRole />} />
-          <Route path="profile" element={<Profile />} />
+          <Route
+            // path="/"
+            // element={
+            //   <RequireAuth>
+            //     <DashboardLayout />
+            //   </RequireAuth>
+            // }
+            element={<DashboardLayout />}
+          >
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="user-role" element={<UserRole />} />
+            <Route path="profile" element={<Profile />} />
 
-          {/* Employee Management Routes */}
-          <Route path="employees" element={<Employees />} />
-          <Route path="employees/add" element={<AddEmployee />} />
-          <Route path="employees/update" element={<UpdateEmployee />} />
-          {/* <Route path="employees/attendance" element={<AddEmployee />} />
+            {/* Employee Management Routes */}
+            <Route path="employees" element={<Employees />} />
+            <Route path="employees/add" element={<AddEmployee />} />
+            <Route path="employees/update" element={<UpdateEmployee />} />
+            {/* <Route path="employees/attendance" element={<AddEmployee />} />
           <Route path="employees/performance" element={<AddEmployee />} />
           <Route path="employees/payroll" element={<AddEmployee />} /> */}
-          
-          {/* Inventory Management Routes */}
-          <Route path="inventory/" element={<Dashboard />} />
-          <Route path="inventory/products" element={<ProductList />} />
-          {/* <Route path="/inventory/products/add" element={<ProductForm />} /> */}
-          <Route path="inventory/suppliers" element={<SupplierList />} />
-          {/* <Route path="/inventory/suppliers/add" element={<SupplierForm />} /> */}
-          <Route
-            path="inventory/purchase-orders"
-            element={<PurchaseOrderList />}
-          />
-          {/* <Route
+
+            {/* Inventory Management Routes */}
+            <Route path="inventory/" element={<Dashboard />} />
+            <Route path="inventory/products" element={<ProductList />} />
+            {/* <Route path="/inventory/products/add" element={<ProductForm />} /> */}
+            <Route path="inventory/suppliers" element={<SupplierList />} />
+            {/* <Route path="/inventory/suppliers/add" element={<SupplierForm />} /> */}
+            <Route
+              path="inventory/purchase-orders"
+              element={<PurchaseOrderList />}
+            />
+            {/* <Route
             path="/inventory/purchase-orders/add"
             element={<PurchaseOrderForm />}
           /> */}
-          {/* <Route path="settings" element={<Settings />} /> */}
-        </Route>
-      </Routes>
+            {/* <Route path="settings" element={<Settings />} /> */}
+          </Route>
+        </Routes>
+      </QueryClientProvider>
     </React.StrictMode>
   );
 };

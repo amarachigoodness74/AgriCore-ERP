@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -142,6 +142,16 @@ const Signin: React.FC = () => {
                   "Sign In"
                 )}
               </button>
+              <div className="text-center text-sm mt-4">
+                <p>
+                  <Link
+                    to="/forgot-password"
+                    className="text-blue-500 cursor-pointer hover:underline"
+                  >
+                    Forgot Password
+                  </Link>
+                </p>
+              </div>
             </div>
           </Form>
         )}

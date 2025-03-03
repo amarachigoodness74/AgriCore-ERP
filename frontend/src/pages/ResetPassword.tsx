@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +18,9 @@ const ResetPasswordSchema = Yup.object().shape({
 });
 
 const ResetPassword: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [alert, setAlert] = useState<string | null>(null);
@@ -39,8 +43,8 @@ const ResetPassword: React.FC = () => {
     try {
       const userJson = await postOrPutData(
         "auth/reset-password",
-        { newPassword, confirmPassword },
-        "POST"
+        { password: newPassword, token },
+        "PUT"
       );
       if (userJson.status === "error") {
         setError(

@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post(
   '/',
-  // acountLimiter,
+  acountLimiter,
   permissionValidation(),
   validate,
   createPermissionController

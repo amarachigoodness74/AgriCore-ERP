@@ -19,3 +19,13 @@ export interface IUserRole {
   description: string;
   permissions: string[];
 }
+
+
+export interface IPermissionIRole {
+  id: string;
+  key?: string;
+  name?: string;
+  label?: string;
+  role?: string;
+  description: string;
+}

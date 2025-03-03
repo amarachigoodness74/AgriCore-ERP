@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { UserRoleType, IPermission } from "../interfaces/types";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { postOrPutData } from "../utils/apiRequests";
 
 const PermissionSchema = Yup.object().shape({
   key: Yup.string().required("Key is required"),
@@ -16,11 +15,28 @@ const PermissionSchema = Yup.object().shape({
 });
 
 const PermissionForm = ({ initialData }: { initialData?: IPermission }) => {
+  const queryClient = useQueryClient();
+
   const [error, setError] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
+  const mutation = useMutation<{ message: string }, Error, IPermission>({
+    mutationFn: (newData) =>
+      postOrPutData(
+        initialData ? `permissions/${initialData.id}` : "permissions",
+        newData,
+        initialData ? "PUT" : "POST"
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["permissions"] });
+    },
+    onError: (error) => {
+      setError(`Error submitting form: ${error.message}`);
+    },
+  });
+
   useEffect(() => {
-    if (msg) {
+    if (msg || error) {
       const timer = setTimeout(() => {
         setMsg(null);
         setError(null);
@@ -41,13 +57,15 @@ const PermissionForm = ({ initialData }: { initialData?: IPermission }) => {
         }}
         validationSchema={PermissionSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          try {
-            await axios.post(`${API_URL}/permissions`, values);
-            setMsg("Permission created successfully!");
-            resetForm();
-          } catch (error) {
-            setError("Failed to create role");
-          }
+          mutation.mutate(values, {
+            onSuccess: (data) => {
+              resetForm();
+              setMsg(data.message);
+            },
+            onError: (err) => {
+              setError(err.message);
+            },
+          });
           setSubmitting(false);
         }}
       >
@@ -135,9 +153,9 @@ const PermissionForm = ({ initialData }: { initialData?: IPermission }) => {
             <button
               type="submit"
               className="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-              disabled={isSubmitting}
+              disabled={isSubmitting || mutation.isPending}
             >
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting || mutation.isPending ? "Submitting..." : "Submit"}
             </button>
           </Form>
         )}

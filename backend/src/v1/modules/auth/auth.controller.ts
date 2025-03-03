@@ -77,6 +77,7 @@ export const loginController = async (
       status: 'success',
       payload: result,
     });
+    return;
   } catch (error) {
     logger.error('Error in loginController', error);
     return next(
@@ -136,6 +137,7 @@ export const forgotPasswordController = async (
         message:
           'If the email exists in our system, you will receive a reset link shortly.',
       });
+      return;
     } else {
       logger.error('Failed to send reset email', {
         email,
@@ -153,7 +155,7 @@ export const forgotPasswordController = async (
     return next(
       new (CustomException as any)(
         500,
-        'Something went wrong. Please try again later.'
+        'ForgotPassword process failed. Please try again later.'
       )
     );
   }
@@ -165,6 +167,12 @@ export const resetPasswordController = async (
   next: NextFunction
 ) => {
   const { password, token } = req.body;
+  if (!token) {
+    return next(
+      new (CustomException as any)(400, 'The reset password link is invalid')
+    );
+  }
+
   try {
     // Hash the received token to match the stored hashed token
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -176,6 +184,7 @@ export const resetPasswordController = async (
         },
       },
     });
+    console.log('====== user', user);
     if (!user) {
       return next(
         new (CustomException as any)(
@@ -212,12 +221,13 @@ export const resetPasswordController = async (
       status: 'success',
       message: 'Password updated successfully.',
     });
+    return;
   } catch (error: any) {
-    logger.error('Error in resetPasswordController', error.message);
+    logger.error('Error in resetPasswordController', error);
     return next(
       new (CustomException as any)(
         500,
-        'An unexpected error occurred. Please try again later.'
+        'ResetPassword process failed. Please try again later.'
       )
     );
   }
@@ -293,6 +303,7 @@ export const refreshTokenController = async (
       status: 'success',
       message: 'Token refreshed successfully',
     });
+    return;
   } catch (error) {
     logger.error('Error in refreshTokenController', error);
     return next(
@@ -339,4 +350,5 @@ export const getSessionController = async (
     status: 'success',
     payload: omit(user, ['password', 'role']),
   });
+  return;
 };

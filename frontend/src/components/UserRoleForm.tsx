@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import CircularLoader from "./Loaders/Circular";
-import { IPermission, IUserRole } from "../interfaces/types";
-
-const API_URL = import.meta.env.VITE_API_URL;
-
+import { IPermissionIRole, IUserRole } from "../interfaces/types";
+import { postOrPutData } from "../utils/apiRequests";
 const RoleSchema = Yup.object().shape({
   label: Yup.string().required("Label is required"),
   role: Yup.string().required("Role is required"),
@@ -16,14 +13,35 @@ const RoleSchema = Yup.object().shape({
     .required("At least one permission is required"),
 });
 
-const UserRoleForm = ({ initialData }: { initialData?: IUserRole }) => {
-  const [permissions, setPermissions] = useState<IPermission[]>([]);
+const UserRoleForm = ({
+  initialData,
+  permissions,
+}: {
+  initialData?: IUserRole;
+  permissions: IPermissionIRole[];
+}) => {
+  const queryClient = useQueryClient();
+
   const [error, setError] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const mutation = useMutation<{ message: string }, Error, IUserRole>({
+    mutationFn: (newData) =>
+      postOrPutData(
+        initialData ? `user-role/${initialData.id}` : "user-role",
+        newData,
+        initialData ? "PUT" : "POST"
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userRoles"] });
+    },
+    onError: (error) => {
+      setError(`Error submitting form: ${error.message}`);
+    },
+  });
 
   useEffect(() => {
-    if (msg) {
+    if (msg || error) {
       const timer = setTimeout(() => {
         setMsg(null);
         setError(null);
@@ -32,31 +50,6 @@ const UserRoleForm = ({ initialData }: { initialData?: IUserRole }) => {
       return () => clearTimeout(timer);
     }
   }, [msg, error]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const permissionsRes = await axios.get(`${API_URL}/permissions`);
-
-        setPermissions(permissionsRes.data.payload);
-      } catch (err) {
-        setError("Failed to load data");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading)
-    return (
-      <p className="text-center text-gray-500">
-        <CircularLoader />
-      </p>
-    );
-  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="max-w-full mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -69,13 +62,15 @@ const UserRoleForm = ({ initialData }: { initialData?: IUserRole }) => {
         }}
         validationSchema={RoleSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          try {
-            await axios.post(`${API_URL}/user-role`, values);
-            setMsg("Role created successfully!");
-            resetForm();
-          } catch (error) {
-            setError("Failed to create role");
-          }
+          mutation.mutate(values, {
+            onSuccess: (data) => {
+              resetForm();
+              setMsg(data.message);
+            },
+            onError: (err) => {
+              setError(err.message);
+            },
+          });
           setSubmitting(false);
         }}
       >
@@ -130,7 +125,8 @@ const UserRoleForm = ({ initialData }: { initialData?: IUserRole }) => {
             <div>
               <label className="block text-gray-600">Permissions</label>
               <div className="border border-gray-300 rounded-lg p-2 mt-1">
-                {permissions.length > 0 &&
+                {permissions &&
+                  permissions.length > 0 &&
                   permissions.map((perm) => (
                     <label
                       key={perm.id}
@@ -175,9 +171,9 @@ const UserRoleForm = ({ initialData }: { initialData?: IUserRole }) => {
             <button
               type="submit"
               className="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-              disabled={isSubmitting}
+              disabled={isSubmitting || mutation.isPending}
             >
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting || mutation.isPending ? "Submitting..." : "Submit"}
             </button>
           </Form>
         )}
