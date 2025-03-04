@@ -35,9 +35,9 @@ model Employee {
   email             String    @unique
   phone             String
   gender            String
-  address           Address
   department        String
-  role              Role
+  label             String
+  role              String
   password          String
   mustResetPassword Boolean
   isActive          Boolean
@@ -45,17 +45,4 @@ model Employee {
   resetTokenExpiry  DateTime?
   createdBy         String
   updatedBy         String
-}
-
-type Address {
-  streetNo Int
-  street   String
-  town     String
-  state    String
-  country  String
-}
-
-type Role {
-  label String
-  role  String
 }

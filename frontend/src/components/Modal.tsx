@@ -1,20 +1,15 @@
-import UserRoleForm from "./UserRoleForm";
-import PermissionForm from "./PermissionForm";
-import DeleteConfirmation from "./DeleteConfirmation";
-import { IPermission, IPermissionIRole, IUserRole } from "../interfaces/types";
+import { ReactNode } from "react";
 
 const Modal = ({
   isOpen,
   close,
   formType,
-  initialData,
-  permissions,
+  children,
 }: {
   isOpen: boolean;
   close: () => void;
   formType: string;
-  initialData?: IPermission | IUserRole;
-  permissions: IPermissionIRole[];
+  children: ReactNode;
 }) => {
   if (!isOpen) return null;
 
@@ -24,7 +19,7 @@ const Modal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-xl">
+      <div className="bg-white rounded-2xl shadow-lg p-6 max-h-[95vh] w-full max-w-xl overflow-auto">
         <div className="flex justify-between items-center border-b pb-3">
           {formType && (
             <h2 className="text-xl font-semibold">
@@ -38,28 +33,7 @@ const Modal = ({
             &times;
           </button>
         </div>
-        <div className="py-4">
-          {formType === "create-user-role" && (
-            <UserRoleForm permissions={permissions} />
-          )}
-          {formType === "create-permission" && <PermissionForm />}
-          {formType === "edit-permission" && (
-            <PermissionForm initialData={initialData as IPermission} />
-          )}
-          {formType === "edit-user-role" && (
-            <UserRoleForm
-              initialData={initialData as IUserRole}
-              permissions={permissions}
-            />
-          )}
-          {(formType === "delete-permission" ||
-            formType === "delete-user-role") && (
-            <DeleteConfirmation
-              initialData={initialData as IPermissionIRole}
-              close={() => handleClose()}
-            />
-          )}
-        </div>
+        <div className="py-4">{children}</div>
         <div className="flex justify-end mt-4">
           <button
             onClick={handleClose}

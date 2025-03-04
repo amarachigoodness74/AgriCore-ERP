@@ -13,67 +13,46 @@ AgriCore ERP is a robust and scalable Enterprise Resource Planning (ERP) system 
 - [Contributing](#contributing)
 - [License](#license)
 
-## Features
-1. User and Role Management:
-- Role-based Access Control (RBAC) to ensure data security
-- Admin and regular user roles with specific permission (e.g., admin, inventory manager, sales staff)
-- Permissions for CRUD operations
+## Features - MVP Feature List
+### 1. User and Role Management (RBAC)
+✅ **Why?** Ensures security and structured access control.  
+- Admin & Regular User roles (e.g., Inventory Manager, Sales Manager).
+- Permissions for CRUD operations based on roles.
+- User authentication (Sign-up, Login, Logout, Password Reset).
 
-2. Employee Management:
+### 2. Inventory Management
+✅ **Why?** Essential for tracking stock levels and managing products.  
+- **Product Management:** Add, update, delete, categorize products (equipment, tools, etc.).
+- **Stock Tracking:** View stock levels, with alerts for low stock.
+- **Supplier Management:** Record supplier details and track purchases.
+- **Basic Purchase Orders:** Create and manage purchase orders from suppliers.
+
+### 3. Sales and Order Management  
+✅ **Why?** Key for tracking sales and customer transactions.  
+- **Order Processing:** Create & manage customer orders.
+- **Invoice Generation:** Generate basic invoices for purchases.
+- **Sales Tracking:** View sales history per product or client.
+
+### 4. Client Management  
+✅ **Why?** Keeps track of customer interactions and orders.  
+- **Customer Profiles:** Store client details (name, contact, order history).
+- **Basic Payment Tracking:** Record when a payment has been made.
+- **Simple Support Tickets:** Log client complaints/issues (optional).
+
+### 5. Finance & Basic Reporting  
+✅ **Why?** Helps with financial oversight and decision-making.  
+- **Basic Financial Reports:** View total revenue, expenses, and top-selling products.
+- **Expense Tracking:** Log expenses like supplier payments.
+- **Exportable Reports:** Download simple reports (CSV/PDF).
+
+### 6. Notifications & Alerts (Basic Version)  
+✅ **Why?** Keeps users updated on key events.  
+- **Stock Alerts:** Notify admins when stock is low.
+- **Order Status Updates:** Notify customers of order progress.
+- **Basic Email Notifications:** For important events (e.g., invoice due).
+
+### 7. Users Management:
 - Employee Profiles (name, contact, position, department)
-- Attendance and Time Tracking
-- Payroll Integration
-- Performance Management
-
-3. Client Management:
-- Record and manage client profiles (name, contact, company details, including purchase history and preferences)
-- Invoices & Payments: Generate invoices and payment receipts
-- Client Support Tickets: Generate invoices and payment receipts
-- Feedback & Reviews
-
-4. Inventory Management (Already in Progress):
-- Product Stock Levels: 
-  - Add, update, categorize, and search for products (equipment, parts, and tools).
-  - Track stock levels in real-time with alerts for low or overstocked items.
-  - Batch updates for bulk product additions or modifications.
-  - Integration with barcodes or QR codes for easy tracking.
-- Suppliers and Vendor Management
-  - Maintain detailed supplier profiles, including contact information, purchase history, and ratings.
-  - Manage purchase orders and track delivery statuses.
-  - Send automated emails or reminders for pending or recurring orders.
-- Purchase Orders and Inventory Restocking
-  - Create and manage purchase orders for suppliers.
-  - Track the status of orders (pending, approved, shipped, received).
-  - Automatically update inventory upon order receipt.
-- Stock Movement History
-
-5. Sales and Order Management:
-- Quote and Invoice Creation: Generate detailed sales reports by product, client, or region.
-- Sales Tracking and Analytics: Process sales orders and maintain a record of transactions.
-- Order Fulfillment Process: Manage returns and refunds seamlessly
-- Payment Tracking (integrate Stripe/PayPal)
-
-6. Finance and Accounting:
-- Budget Management
-- Expense Tracking
-- Financial Reports
-- Tax Calculations and Compliance
-
-7. Reports and Analytics:
-- Customizable Dashboards: Visual dashboards for decision-making (charts, graphs, and summary reports)
-- Key Performance Indicators (KPIs)
-- Exportable Reports (CSV, PDF)
-- Generate custom reports for inventory trends, supplier efficiency, sales performance, and profitability
-
-8. Notifications and Communication (Alerts):
-- Email/SMS Notifications for Key Events 
-- Internal Messaging System (in-app notifications - optional) for critical events (low stock, overdue payments, order updates)
-- Automated reminders for Tasks/Deadlines and supplier payments or recurring orders
-
-9. System Settings:
-- Company Information: Configure company-specific details like language preferences, currency, taxes, and business hours
-- Custom Branding (logo, colors)
-- Set custom thresholds for alerts and notifications
 
 ---
 

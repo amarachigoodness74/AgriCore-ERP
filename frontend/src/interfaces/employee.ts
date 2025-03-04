@@ -22,14 +22,14 @@ export interface IEmployeeWithoutPasswordAndRole {
 }
 
 export interface IEmployee {
-  id: string;
+  id?: string;
   name: string;
   email: string;
   phone: string;
   gender: string;
-  address?: IAddress;
   department: string;
   role: string;
+  label: string;
   password?: string;
   mustResetPassword?: boolean;
   isActive?: boolean;

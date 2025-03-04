@@ -2,18 +2,21 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { IPermissionIRole } from "../interfaces/types";
-import { deleteData } from "../utils/apiRequests";
+import { deleteData } from "../../utils/apiRequests";
 
 const DeleteSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
 });
 
 const DeleteConfirmation = ({
-  initialData,
+  id,
+  name,
+  type,
   close,
 }: {
-  initialData: IPermissionIRole;
+  id: string;
+  name: string;
+  type: string;
   close: () => void;
 }) => {
   const queryClient = useQueryClient();
@@ -22,8 +25,7 @@ const DeleteConfirmation = ({
   const [msg, setMsg] = useState<string | null>(null);
 
   const mutation = useMutation<{ message: string }, Error, string>({
-    mutationFn: (id) =>
-      deleteData(id, initialData.role ? "user-role" : "permissions"),
+    mutationFn: (id) => deleteData(id, type ? "user-role" : "permissions"),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userRoles"] });
       queryClient.invalidateQueries({ queryKey: ["permissions"] });
@@ -33,8 +35,6 @@ const DeleteConfirmation = ({
       setError(`Error submitting form: ${error.message}`);
     },
   });
-
-  const name = initialData?.name || initialData?.role;
 
   return (
     <div>
@@ -58,7 +58,7 @@ const DeleteConfirmation = ({
             if (values.name !== name) {
               setError("Please enter the correct value");
             }
-            mutation.mutate(initialData.id, {
+            mutation.mutate(id, {
               onSuccess: (data) => {
                 resetForm();
                 setMsg(data.message);

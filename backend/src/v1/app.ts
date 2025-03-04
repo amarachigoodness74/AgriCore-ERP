@@ -32,7 +32,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(cors<Request>(corsOption));
 app.use(compression());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(sessionConfig);
 

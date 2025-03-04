@@ -1,19 +1,11 @@
-interface IAddress {
-  streetNo?: number;
-  street: string;
-  town: string;
-  state: string;
-  country: string;
-}
-
 export interface IEmployee {
   name: string;
   email: string;
   phone: string;
   gender: string;
-  address: IAddress;
   department: string;
   role: string;
+  label: string;
   password?: string;
   mustResetPassword?: boolean;
   isActive?: boolean;
@@ -28,7 +20,6 @@ export interface IEmployeeWithoutPasswordAndRole {
   email: string;
   phone: string;
   gender: string;
-  address: IAddress;
   department: string;
   mustResetPassword?: boolean;
   isActive?: boolean;

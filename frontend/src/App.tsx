@@ -19,15 +19,18 @@ const Dashboard = lazy(() => reloadOnFail(() => import("./pages/Dashboard")));
 const UserRole = lazy(() => reloadOnFail(() => import("./pages/UserRole")));
 const Profile = lazy(() => reloadOnFail(() => import("./pages/Profile")));
 
-// Employee Management Routes
+// Users Management Routes
+const Users = lazy(() =>
+  reloadOnFail(() => import("./pages/Users"))
+);
 const Employees = lazy(() =>
-  reloadOnFail(() => import("./components/Employees"))
+  reloadOnFail(() => import("./components/users/Employees"))
 );
-const AddEmployee = lazy(() =>
-  reloadOnFail(() => import("./components/Employees/AddEmployee"))
+const Clients = lazy(() =>
+  reloadOnFail(() => import("./components/users/Employees"))
 );
-const UpdateEmployee = lazy(() =>
-  reloadOnFail(() => import("./components/Employees/UpdateEmployee"))
+const Suppliers = lazy(() =>
+  reloadOnFail(() => import("./components/users/Employees"))
 );
 
 // Inventory Management Routes
@@ -45,7 +48,7 @@ const PurchaseOrderList = lazy(() =>
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
-  
+
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
@@ -55,46 +58,38 @@ const App = () => {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
           </Routes>
-        </Suspense>
-        <Routes>
-          <Route
-            // path="/"
-            // element={
-            //   <RequireAuth>
-            //     <DashboardLayout />
-            //   </RequireAuth>
-            // }
-            element={<DashboardLayout />}
-          >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="user-role" element={<UserRole />} />
-            <Route path="profile" element={<Profile />} />
-
-            {/* Employee Management Routes */}
-            <Route path="employees" element={<Employees />} />
-            <Route path="employees/add" element={<AddEmployee />} />
-            <Route path="employees/update" element={<UpdateEmployee />} />
-            {/* <Route path="employees/attendance" element={<AddEmployee />} />
-          <Route path="employees/performance" element={<AddEmployee />} />
-          <Route path="employees/payroll" element={<AddEmployee />} /> */}
-
-            {/* Inventory Management Routes */}
-            <Route path="inventory/" element={<Dashboard />} />
-            <Route path="inventory/products" element={<ProductList />} />
-            {/* <Route path="/inventory/products/add" element={<ProductForm />} /> */}
-            <Route path="inventory/suppliers" element={<SupplierList />} />
-            {/* <Route path="/inventory/suppliers/add" element={<SupplierForm />} /> */}
+          <Routes>
             <Route
-              path="inventory/purchase-orders"
-              element={<PurchaseOrderList />}
-            />
-            {/* <Route
-            path="/inventory/purchase-orders/add"
-            element={<PurchaseOrderForm />}
-          /> */}
-            {/* <Route path="settings" element={<Settings />} /> */}
-          </Route>
-        </Routes>
+              // path="/"
+              // element={
+              //   <RequireAuth>
+              //     <DashboardLayout />
+              //   </RequireAuth>
+              // }
+              element={<DashboardLayout />}
+            >
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="user-role" element={<UserRole />} />
+              <Route path="profile" element={<Profile />} />
+
+              {/* Users Management Routes */}
+              <Route path="/users" element={<Users />} />
+              <Route path="/users/employees" element={<Employees />} />
+              <Route path="users/clients" element={<Clients />} />
+              <Route path="users/suppliers" element={<Suppliers />} />
+
+              {/* Inventory Management Routes */}
+              <Route path="inventory/" element={<Dashboard />} />
+              <Route path="inventory/products" element={<ProductList />} />
+              <Route path="inventory/suppliers" element={<SupplierList />} />
+              <Route
+                path="inventory/purchase-orders"
+                element={<PurchaseOrderList />}
+              />
+              {/* <Route path="settings" element={<Settings />} /> */}
+            </Route>
+          </Routes>
+        </Suspense>
       </QueryClientProvider>
     </React.StrictMode>
   );

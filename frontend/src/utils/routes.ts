@@ -27,28 +27,23 @@ const menuItems = [
     icon: faUserTie,
   },
   {
-    title: "Employees",
+    title: "Users",
     icon: faUsers,
     children: [
       {
         title: "Employees",
         slug: "employees",
-        path: "/employees",
+        path: "/users/employees",
       },
       {
-        title: "Attendance Records",
-        slug: "attendance",
-        path: "/employees/attendance",
+        title: "Clients",
+        slug: "clients",
+        path: "/users/clients",
       },
       {
-        title: "Performance",
-        slug: "performance",
-        path: "/employees/performance",
-      },
-      {
-        title: "Payroll",
-        slug: "payroll",
-        path: "/employees/payroll",
+        title: "Suppliers",
+        slug: "suppliers",
+        path: "/users/suppliers",
       },
     ],
   },

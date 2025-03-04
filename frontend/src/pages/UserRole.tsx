@@ -5,6 +5,9 @@ import { withAuthContext } from "../context/auth/AuthContext";
 import BreadCrumb from "../components/BreadCrumb";
 import CircularLoader from "../components/Loaders/Circular";
 import Modal from "../components/Modal";
+import UserRoleForm from "../components/userRoles/UserRoleForm";
+import PermissionForm from "../components/userRoles/PermissionForm";
+import DeleteConfirmation from "../components/userRoles/DeleteConfirmation";
 import { IPermission, IUserRole } from "../interfaces/types";
 import { IAuthContextType } from "../interfaces/authContext";
 import { getData } from "../utils/apiRequests";
@@ -34,6 +37,7 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
     queryFn: () => getData("user-role"),
   });
 
+  const [name, setName] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formType, setFormType] = useState("");
   const [selectedData, setSelectedData] = useState<
@@ -63,9 +67,6 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
     setSelectedData(data);
     setIsModalOpen(true);
   };
-
-  console.log("======= permissions", permissions.payload);
-  console.log("======= userRoles", userRoles.payload);
 
   return (
     <>
@@ -159,6 +160,7 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
                             <span className="text-red-600 hover:text-red-800 transition duration-300 cursor-pointer">
                               <Trash2
                                 onClick={() => {
+                                  setName(userRole.role);
                                   openModal("delete-user-role", userRole);
                                 }}
                               />
@@ -245,6 +247,7 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
                               <span className="text-red-600 hover:text-red-800 transition duration-300 cursor-pointer">
                                 <Trash2
                                   onClick={() => {
+                                    setName(permission.name);
                                     openModal("delete-permission", permission);
                                   }}
                                 />
@@ -266,9 +269,39 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
         isOpen={isModalOpen}
         close={() => setIsModalOpen(false)}
         formType={formType}
-        initialData={selectedData as IPermission | IUserRole | undefined}
-        permissions={permissions.payload}
-      />
+      >
+        {formType === "create-user-role" && (
+          <UserRoleForm permissions={permissions} />
+        )}
+        {formType === "create-permission" && <PermissionForm />}
+        {formType === "edit-permission" && (
+          <PermissionForm
+            initialData={selectedData as IPermission | undefined}
+          />
+        )}
+        {formType === "edit-user-role" && (
+          <UserRoleForm
+            initialData={selectedData as IUserRole | undefined}
+            permissions={permissions}
+          />
+        )}
+        {formType === "delete-permission" && (
+          <DeleteConfirmation
+            id={selectedData?.id || ""}
+            name={name || ""}
+            type="permission"
+            close={() => setIsModalOpen(false)}
+          />
+        )}
+        {formType === "delete-user-role" && (
+          <DeleteConfirmation
+            id={selectedData?.id || ""}
+            name={name || ""}
+            type="user-role"
+            close={() => setIsModalOpen(false)}
+          />
+        )}
+      </Modal>
     </>
   );
 };

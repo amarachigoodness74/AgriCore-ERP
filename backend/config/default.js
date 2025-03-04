@@ -1,13 +1,13 @@
-import dotenv from 'dotenv-safe';
+const dotenv = require('dotenv-safe');
 
 dotenv.config();
 
-export default {
+module.exports = {
   environment: {
     host: process.env.HOST || '0.0.0.0',
-    port: Number(String(process.env.PORT)) || 5000,
-    saltWorkFactor: Number(String(process.env.SALT_GEN)) || 10,
-    clientURL: String(process.env.UI_URL) || 'http://localhost:3000',
+    port: Number(process.env.PORT) || 5000,
+    saltWorkFactor: Number(process.env.SALT_GEN) || 10,
+    clientURL: process.env.UI_URL || 'http://localhost:3000',
   },
   dbConfig: {
     url: process.env.DATABASE_URL || '',

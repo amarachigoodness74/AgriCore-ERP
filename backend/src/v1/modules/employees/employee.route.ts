@@ -1,6 +1,6 @@
 import * as express from 'express';
 import acountLimiter from '../../shared/middlewares/rateLimiterForRoutes';
-import { validation, validate } from './employee.validation';
+import { employeeValidation, validate } from './employee.validation';
 import {
   createEmployeeController,
   getEmployeesController,
@@ -9,7 +9,7 @@ import {
   updateEmployeeController,
   removeEmployeeController,
 } from './employee.controller';
-import isAuthorized from '../../shared/middlewares/isAuthorized';
+// import isAuthorized from '../../shared/middlewares/isAuthorized';
 // import ROLES_LIST from '../../config/roles_list';
 
 const router = express.Router();
@@ -17,7 +17,7 @@ const router = express.Router();
 router.post(
   '/',
   acountLimiter,
-  validation(),
+  employeeValidation(),
   validate,
   // isAuthorized(ROLES_LIST.HumanResource, ROLES_LIST.Administrator),
   createEmployeeController
@@ -27,7 +27,7 @@ router.get('/:id', getEmployeeController);
 router.get('/count', countEmployeesController);
 router.put(
   '/:id',
-  validation(),
+  employeeValidation(),
   validate,
   // isAuthorized(ROLES_LIST.HumanResource, ROLES_LIST.Administrator),
   updateEmployeeController

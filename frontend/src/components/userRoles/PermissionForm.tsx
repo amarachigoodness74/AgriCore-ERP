@@ -2,38 +2,33 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { IPermissionIRole, IUserRole } from "../interfaces/types";
-import { postOrPutData } from "../utils/apiRequests";
-const RoleSchema = Yup.object().shape({
-  label: Yup.string().required("Label is required"),
-  role: Yup.string().required("Role is required"),
+import { UserRoleType, IPermission } from "../../interfaces/types";
+import { postOrPutData } from "../../utils/apiRequests";
+
+const PermissionSchema = Yup.object().shape({
+  key: Yup.string().required("Key is required"),
+  name: Yup.string().required("Name is required"),
   description: Yup.string(),
-  permissions: Yup.array()
-    .of(Yup.string())
-    .required("At least one permission is required"),
+  group: Yup.mixed<UserRoleType>()
+    .oneOf(Object.values(UserRoleType), "Invalid group selection")
+    .required("Group is required"),
 });
 
-const UserRoleForm = ({
-  initialData,
-  permissions,
-}: {
-  initialData?: IUserRole;
-  permissions: IPermissionIRole[];
-}) => {
+const PermissionForm = ({ initialData }: { initialData?: IPermission }) => {
   const queryClient = useQueryClient();
 
   const [error, setError] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
-  const mutation = useMutation<{ message: string }, Error, IUserRole>({
+  const mutation = useMutation<{ message: string }, Error, IPermission>({
     mutationFn: (newData) =>
       postOrPutData(
-        initialData ? `user-role/${initialData.id}` : "user-role",
+        initialData ? `permissions/${initialData.id}` : "permissions",
         newData,
         initialData ? "PUT" : "POST"
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userRoles"] });
+      queryClient.invalidateQueries({ queryKey: ["permissions"] });
     },
     onError: (error) => {
       setError(`Error submitting form: ${error.message}`);
@@ -55,12 +50,12 @@ const UserRoleForm = ({
     <div className="max-w-full mx-auto bg-white p-6 rounded-lg shadow-md">
       <Formik
         initialValues={{
-          label: initialData?.label || "",
-          role: initialData?.role || "",
+          key: initialData?.key || "",
+          name: initialData?.name || "",
           description: initialData?.description || "",
-          permissions: initialData?.permissions || [],
+          group: initialData?.group || ("" as UserRoleType),
         }}
-        validationSchema={RoleSchema}
+        validationSchema={PermissionSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           mutation.mutate(values, {
             onSuccess: (data) => {
@@ -74,33 +69,33 @@ const UserRoleForm = ({
           setSubmitting(false);
         }}
       >
-        {({ isSubmitting, values, setFieldValue }) => (
-          <Form className="space-y-4">
+        {({ isSubmitting }) => (
+          <Form className="space-y-12">
             <div>
-              <label className="block text-gray-600">Label</label>
+              <label className="block text-gray-600">Key</label>
               <Field
                 type="text"
-                name="label"
+                name="key"
                 className="w-full border border-gray-300 rounded-lg p-2 mt-1"
-                placeholder="Enter label"
+                placeholder="Enter key"
               />
               <ErrorMessage
-                name="label"
+                name="key"
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
             </div>
 
             <div>
-              <label className="block text-gray-600">Role</label>
+              <label className="block text-gray-600">Name</label>
               <Field
                 type="text"
-                name="role"
+                name="name"
                 className="w-full border border-gray-300 rounded-lg p-2 mt-1"
-                placeholder="Enter role"
+                placeholder="Enter name"
               />
               <ErrorMessage
-                name="role"
+                name="name"
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
@@ -123,34 +118,21 @@ const UserRoleForm = ({
             </div>
 
             <div>
-              <label className="block text-gray-600">Permissions</label>
-              <div className="border border-gray-300 rounded-lg p-2 mt-1">
-                {permissions &&
-                  permissions.length > 0 &&
-                  permissions.map((perm) => (
-                    <label
-                      key={perm.id}
-                      className="flex items-center space-x-2"
-                    >
-                      <input
-                        type="checkbox"
-                        name="permissions"
-                        value={perm.id}
-                        checked={values.permissions.includes(perm.id)}
-                        onChange={(e) => {
-                          const newPermissions = e.target.checked
-                            ? [...values.permissions, perm.id]
-                            : values.permissions.filter((p) => p !== perm.id);
-                          setFieldValue("permissions", newPermissions);
-                        }}
-                        className="mr-2"
-                      />
-                      <span>{perm.name}</span>
-                    </label>
-                  ))}
-              </div>
+              <label className="block text-gray-600">Group</label>
+              <Field
+                as="select"
+                name="group"
+                className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+              >
+                <option value="">Select a group</option>
+                {Object.values(UserRoleType).map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </Field>
               <ErrorMessage
-                name="permissions"
+                name="group"
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
@@ -182,4 +164,4 @@ const UserRoleForm = ({
   );
 };
 
-export default UserRoleForm;
+export default PermissionForm;

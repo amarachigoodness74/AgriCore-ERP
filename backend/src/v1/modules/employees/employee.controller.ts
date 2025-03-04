@@ -18,6 +18,7 @@ export const createEmployeeController = async (
   next: NextFunction
 ) => {
   const { email } = req.body;
+  const clientUrl = config.get('environment.clientUrl') as string;
   const existingUser = await isUser(email, next);
   if (existingUser) {
     return next(new (CustomException as any)(400, 'Employee already exist'));
@@ -27,9 +28,11 @@ export const createEmployeeController = async (
     const user = await prisma.employee.create({
       data: {
         ...req.body,
+        password: '',
         mustResetPassword: true,
         isActive: true,
-        createdBy: req.body.currentUserId,
+        createdBy: '67c6f549f9adaa1da52c49ab',
+        updatedBy: '67c6f549f9adaa1da52c49ab',
       },
     });
     const result = omit(user, ['password']);
@@ -37,7 +40,7 @@ export const createEmployeeController = async (
     const createToken: ICreateToken = {
       employeeInfo: {
         email: result.email,
-        role: result.role.role,
+        role: result.role,
       },
       isRefreshToken: false,
     };
@@ -83,7 +86,6 @@ export const getEmployeesController = async (
           email: true,
           phone: true,
           gender: true,
-          address: true,
           department: true,
           createdBy: true,
           updatedBy: true,
@@ -184,6 +186,7 @@ export const removeEmployeeController = async (
         id: req.params.id,
       },
       data: {
+        password: '',
         isActive: false,
         mustResetPassword: true,
         resetToken: null,
