@@ -1,4 +1,4 @@
-import { IEmployee } from "../interfaces/employee";
+import { IEmployee } from "../interfaces/users";
 
 export const demoEmployees: IEmployee[] = [
   {

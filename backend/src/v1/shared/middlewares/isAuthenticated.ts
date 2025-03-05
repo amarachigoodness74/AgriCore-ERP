@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { get } from 'lodash';
+import { isUser } from '../../modules/employees/employee.service';
 import logger from '../utils/logger';
 import { verifyAccessToken } from '../utils/helpers';
-import { isUser } from '../services/user.service';
 import {
   InvalidCredentialsException,
   NotFoundException,

@@ -6,6 +6,8 @@ import permissionRoute from './modules/userRolePermissions/permission.route';
 import userRoleRoute from './modules/userRolePermissions/userRole.route';
 import authRoute from './modules/auth/auth.route';
 import employeeRoute from './modules/employees/employee.route';
+import clientRoute from './modules/clients/client.route';
+import supplierRoute from './modules/clients/client.route';
 import corsOption from './shared/utils/corsOptions';
 import allowedOrigins from './shared/utils/allowedOrigins';
 import sessionConfig from './shared/utils/sessionConfig';
@@ -44,6 +46,8 @@ app.use('/permissions', permissionRoute);
 app.use('/user-role', userRoleRoute);
 app.use('/auth', authRoute);
 app.use('/employees', employeeRoute);
+app.use('/clients', clientRoute);
+app.use('/suppliers', supplierRoute);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -54,7 +58,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500).json({
     status: 'error',
-    errors: err.message,
+    error: err.message,
   });
   return;
 });

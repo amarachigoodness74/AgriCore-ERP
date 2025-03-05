@@ -77,13 +77,13 @@ const DashboardWithAuth = ({ authContext }: authProps) => {
     { id: 1, name: "Product A", sales: 150, revenue: "$450" },
     { id: 2, name: "Product B", sales: 200, revenue: "$600" },
     { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
-    { id: 3, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 4, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 5, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 6, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 7, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 8, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 9, name: "Product C", sales: 120, revenue: "$360" },
+    { id: 10, name: "Product C", sales: 120, revenue: "$360" },
   ];
 
   return (

@@ -91,31 +91,31 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
             <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
               <table className="w-full min-w-[640px] table-auto">
                 <thead>
-                  <tr>
+                  <tr className="bg-gray-100 text-[14px] font-medium font-sans ">
                     <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                      <p className="block antialiased uppercase text-blue-gray-400">
                         Role
                       </p>
                     </th>
                     <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                      <p className="block antialiased uppercase text-blue-gray-400">
                         Members
                       </p>
                     </th>
                     <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                      <p className="block antialiased uppercase text-blue-gray-400">
                         Description
                       </p>
                     </th>
-                    <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                      <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                    <th className="border-b border-blue-gray-50 py-3 px-6 text-center">
+                      <p className="block antialiased uppercase text-blue-gray-400">
                         Actions
                       </p>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {userRoles &&
+                  {userRoles.payload &&
                     userRoles.payload.length > 0 &&
                     userRoles.payload.map((userRole: IUserRole) => (
                       <tr key={userRole.id} className="text-sm">
@@ -197,31 +197,31 @@ const UserRoleWithAuth = ({ authContext }: authProps) => {
               <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
                 <table className="w-full min-w-[640px] table-auto">
                   <thead>
-                    <tr>
+                    <tr className="bg-gray-100 text-[14px] font-medium font-sans ">
                       <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        <p className="block antialiased uppercase text-blue-gray-400">
                           Name
                         </p>
                       </th>
                       <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        <p className="block antialiased uppercase text-blue-gray-400">
                           Group
                         </p>
                       </th>
                       <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                        <p className="block antialiased uppercase text-blue-gray-400">
                           Description
                         </p>
                       </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-center">
+                        <p className="block antialiased uppercase text-blue-gray-400">
                           Actions
                         </p>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {permissions &&
+                    {permissions.payload &&
                       permissions.payload.length > 0 &&
                       permissions.payload.map((permission: IPermission) => (
                         <tr key={permission?.id} className="text-sm">

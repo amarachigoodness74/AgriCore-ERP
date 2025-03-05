@@ -20,17 +20,15 @@ const UserRole = lazy(() => reloadOnFail(() => import("./pages/UserRole")));
 const Profile = lazy(() => reloadOnFail(() => import("./pages/Profile")));
 
 // Users Management Routes
-const Users = lazy(() =>
-  reloadOnFail(() => import("./pages/Users"))
-);
+const Users = lazy(() => reloadOnFail(() => import("./pages/Users")));
 const Employees = lazy(() =>
   reloadOnFail(() => import("./components/users/Employees"))
 );
 const Clients = lazy(() =>
-  reloadOnFail(() => import("./components/users/Employees"))
+  reloadOnFail(() => import("./components/users/Clients"))
 );
 const Suppliers = lazy(() =>
-  reloadOnFail(() => import("./components/users/Employees"))
+  reloadOnFail(() => import("./components/users/Supplier"))
 );
 
 // Inventory Management Routes

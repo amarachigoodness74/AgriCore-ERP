@@ -2,7 +2,7 @@
   "name": "agricore-be",
   "version": "1.0.0",
   "description": "AgriCore ERP is a robust and scalable Enterprise Resource Planning (ERP) system tailored for Agriculture Equipment Suppliers",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "develop": "nodemon",
     "test": "jest",

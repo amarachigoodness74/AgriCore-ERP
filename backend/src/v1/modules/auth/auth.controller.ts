@@ -122,8 +122,7 @@ export const forgotPasswordController = async (
       },
     });
 
-    const clientUrl = config.get('environment.clientUrl') as string;
-    const resetLink = `${clientUrl}/reset-password?token=${hashedToken}`;
+    const resetLink = `${config.get('environment.clientUrl') as string}/reset-password?token=${hashedToken}`;
 
     const mailSent = await transporter.sendMail({
       to: email,

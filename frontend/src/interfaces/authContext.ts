@@ -1,4 +1,4 @@
-import { IEmployeeWithoutPasswordAndRole } from "./employee";
+import { IEmployeeWithoutPasswordAndRole } from "./users";
 
 export interface IAuthContextType {
   // Value that returns whether the user is authenticated

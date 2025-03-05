@@ -15,16 +15,20 @@ export interface IEmployee {
   updatedBy: string;
 }
 
-export interface IEmployeeWithoutPasswordAndRole {
+export interface IClient {
   name: string;
   email: string;
   phone: string;
-  gender: string;
-  department: string;
-  mustResetPassword?: boolean;
-  isActive?: boolean;
-  resetToken?: String;
-  resetTokenExpiry?: Date;
+  isActive: boolean;
+  createdBy: string;
+  updatedBy: string;
+}
+
+export interface ISupplier {
+  name: string;
+  email: string;
+  phone: string;
+  isActive: boolean;
   createdBy: string;
   updatedBy: string;
 }

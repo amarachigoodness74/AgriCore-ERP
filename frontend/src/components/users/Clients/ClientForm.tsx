@@ -1,25 +1,14 @@
 import { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Yup from "yup";
 import ThreeDotsLoader from "../../Loaders/ThreeDots";
-import { IEmployee } from "../../../interfaces/users";
-import { getData, postOrPutData } from "../../../utils/apiRequests";
-import CircularLoader from "../../Loaders/Circular";
-import { IUserRole } from "../../../interfaces/types";
+import { IClient } from "../../../interfaces/users";
+import { postOrPutData } from "../../../utils/apiRequests";
 
-const EmployeeForm = ({ initialData }: { initialData?: IEmployee }) => {
+const ClientForm = ({ initialData }: { initialData?: IClient }) => {
   console.log("initialData", initialData);
   const queryClient = useQueryClient();
-
-  const {
-    data: userRoles,
-    error: userRolesError,
-    isLoading: userRolesLoading,
-  } = useQuery({
-    queryKey: ["userRoles"],
-    queryFn: () => getData("user-role"),
-  });
 
   const [error, setError] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
@@ -28,35 +17,27 @@ const EmployeeForm = ({ initialData }: { initialData?: IEmployee }) => {
     name: initialData?.name || "",
     email: initialData?.email || "",
     phone: initialData?.phone || "",
-    gender: initialData?.gender || "",
-    department: initialData?.department || "",
-    role: initialData?.role || "",
   };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     phone: Yup.string().required("Phone is required"),
-    gender: Yup.string()
-      .oneOf(["Male", "Female"], "Invalid gender")
-      .required("Gender is required"),
-    department: Yup.string().required("Department is required"),
-    role: Yup.string().required("Role is required"),
   });
 
   const mutation = useMutation<
     { message: string; error?: string },
     Error,
-    IEmployee
+    IClient
   >({
     mutationFn: (newData) =>
       postOrPutData(
-        initialData ? `employees/${initialData.id}` : "employees",
+        initialData ? `clients/${initialData.id}` : "clients",
         newData,
         initialData ? "PUT" : "POST"
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
     onError: (error) => {
       setError(`Error submitting form: ${error.message}`);
@@ -74,31 +55,13 @@ const EmployeeForm = ({ initialData }: { initialData?: IEmployee }) => {
     }
   }, [msg, error]);
 
-  if (userRolesLoading)
-    return (
-      <p className="text-center text-gray-500">
-        <CircularLoader />
-      </p>
-    );
-
-  if (userRolesError)
-    return <p className="text-red-500">{(userRolesError as Error).message}</p>;
-
   return (
     <main className="flex-1 bg-gray-100 p-6 overflow-auto">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          const selectedRole = userRoles.payload.find(
-            (r) => r.label === values.role
-          );
-          const updatedValues = {
-            ...values,
-            role: selectedRole.role,
-            label: selectedRole.label,
-          };
-          mutation.mutate(updatedValues, {
+          mutation.mutate(values, {
             onSuccess: (data) => {
               if (data.error) {
                 setError(data.error);
@@ -148,66 +111,6 @@ const EmployeeForm = ({ initialData }: { initialData?: IEmployee }) => {
                 className="text-red-500"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Gender</label>
-              <Field
-                as="select"
-                name="gender"
-                className="w-full border p-2 rounded text-gray-500"
-              >
-                <option className="text-red-500" value="">
-                  Select Gender
-                </option>
-                <option className="text-red-500" value="Male">
-                  Male
-                </option>
-                <option className="text-red-500" value="Female">
-                  Female
-                </option>
-              </Field>
-              <ErrorMessage
-                name="gender"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Department</label>
-              <Field name="department" className="w-full border p-2 rounded" />
-              <ErrorMessage
-                name="department"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-            {userRoles.payload && userRoles.payload.length > 0 && (
-              <div className="mb-4">
-                <label className="block text-gray-700">Role</label>
-                <Field
-                  as="select"
-                  name="role"
-                  className="w-full border p-2 rounded text-gray-500"
-                >
-                  <option className="text-red-500" value="">
-                    Select Role
-                  </option>
-                  {userRoles.payload.map((userRole: IUserRole) => (
-                    <option
-                      className="text-red-500"
-                      value={userRole.label}
-                      key={userRole.label}
-                    >
-                      {userRole.role}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage
-                  name="role"
-                  component="div"
-                  className="text-red-500"
-                />
-              </div>
-            )}
 
             {error && (
               <div className="text-center font-bold mt-1 text-red-500 text-sm">
@@ -237,4 +140,4 @@ const EmployeeForm = ({ initialData }: { initialData?: IEmployee }) => {
   );
 };
 
-export default EmployeeForm;
+export default ClientForm;

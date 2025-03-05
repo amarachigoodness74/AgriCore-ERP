@@ -2,6 +2,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { get } from 'lodash';
 import dotenv from 'dotenv-safe';
+import { getUser } from '../../modules/employees/employee.service';
 import { verifyAccessToken } from '../utils/helpers';
 import {
   InvalidCredentialsException,
@@ -9,7 +10,6 @@ import {
   UnauthorizedException,
 } from '../utils/errors';
 import { IDecodedToken } from '../interfaces/token';
-import { getUser } from 'api/services/user.service';
 
 dotenv.config();
 

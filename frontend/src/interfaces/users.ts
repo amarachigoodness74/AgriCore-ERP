@@ -38,3 +38,24 @@ export interface IEmployee {
   createdBy?: string;
   updatedBy?: string;
 }
+
+export interface IClient {
+  id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  isActive?: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+}
+
+// Same with IClent but I am giving room for futre additions
+export interface ISupplier {
+  id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  isActive?: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+}

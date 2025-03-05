@@ -1,6 +1,7 @@
 import session from 'express-session';
 import MongoStore from 'connect-mongo'; // redis is best but used mongodb because of deployment
-import config from 'config';import dotenv from 'dotenv-safe';
+import config from 'config';
+import dotenv from 'dotenv-safe';
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ const sessionConfig = session({
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: config.get('dbConfig.url') as string,
-    collectionName: 'sessions',
+    collectionName: 'Sessions',
   }),
   cookie: {
     httpOnly: process.env.NODE_ENV === 'production',

@@ -5,38 +5,34 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { IEmployee } from "../../../interfaces/users";
+import { SquarePen, Trash2 } from "lucide-react";
 import BreadCrumb from "../../BreadCrumb";
-import EmployeeForm from "./EmployeeForm";
+import ClientForm from "./ClientForm";
 import Modal from "../../Modal";
 import DeleteConfirmation from "./DeleteConfirmation";
 import CircularLoader from "../../Loaders/Circular";
 import { getData } from "../../../utils/apiRequests";
-import { SquarePen, Trash2 } from "lucide-react";
+import { IClient } from "../../../interfaces/users";
+import { demoEmployees } from "../../../demo-data/employees";
 
-const EmployeeTable: React.FC = () => {
-  const {
-    data: employees,
-    error: employeesError,
-    isLoading: employeesLoading,
-  } = useQuery({
-    queryKey: ["employees"],
-    queryFn: () => getData("employees"),
-  });
+const ClientTable: React.FC = () => {
+  // const {
+  //   data: clients,
+  //   error: clientsError,
+  //   isLoading: clientsLoading,
+  // } = useQuery({
+  //   queryKey: ["clients"],
+  //   queryFn: () => getData("clients"),
+  // });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formType, setFormType] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState<IEmployee | null>(
-    null
-  );
+  const [selectedClient, setSelectedClient] = useState<IClient | null>(null);
 
   const columns = [
     { accessorKey: "name", header: "Name" },
     { accessorKey: "email", header: "Email" },
     { accessorKey: "phone", header: "Phone" },
-    { accessorKey: "gender", header: "Gender" },
-    { accessorKey: "department", header: "Department" },
-    { accessorKey: "role", header: "Role" },
     {
       id: "actions",
       header: "Actions",
@@ -45,8 +41,8 @@ const EmployeeTable: React.FC = () => {
           <span
             className="text-blue-600 hover:text-blue-800 transition duration-300 cursor-pointer"
             onClick={() => {
-              setSelectedEmployee(row.original);
-              openModal("edit-employee", row.original);
+              setSelectedClient(row.original);
+              openModal("edit-client", row.original);
             }}
           >
             <SquarePen />
@@ -54,8 +50,8 @@ const EmployeeTable: React.FC = () => {
           <span
             className="text-red-600 hover:text-red-800 transition duration-300 cursor-pointer"
             onClick={() => {
-              setSelectedEmployee(row.original);
-              openModal("delete-employee", row.original);
+              setSelectedClient(row.original);
+              openModal("delete-client", row.original);
             }}
           >
             <Trash2 />
@@ -66,43 +62,44 @@ const EmployeeTable: React.FC = () => {
   ];
 
   const table = useReactTable({
-    data: employees?.payload ?? [],
+    // data: clients?.payload ?? [],
+    data: demoEmployees,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (employeesLoading)
-    return (
-      <p className="text-center text-gray-500">
-        <CircularLoader />
-      </p>
-    );
+  // if (clientsLoading)
+  //   return (
+  //     <p className="text-center text-gray-500">
+  //       <CircularLoader />
+  //     </p>
+  //   );
 
-  if (employeesError)
-    return <p className="text-red-500">{(employeesError as Error).message}</p>;
+  // if (clientsError)
+  //   return <p className="text-red-500">{(clientsError as Error).message}</p>;
 
-  const openModal = (type: string, data: IEmployee | null = null) => {
+  const openModal = (type: string, data: IClient | null = null) => {
     setFormType(type);
-    setSelectedEmployee(data);
+    setSelectedClient(data);
     setIsModalOpen(true);
   };
 
   return (
     <>
-      <BreadCrumb page="Employees" />
+      <BreadCrumb page="Clients" />
       <div className="my-12 relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
         <div className="relative bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-gray-900 to-gray-800 text-white shadow-gray-900/20 shadow-lg -mt-6 mb-8 p-6">
           <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">
-            Employees
+            Clients
           </h6>
         </div>
         <div className="mb-4">
           <div className="flex justify-end mb-8 mr-4">
             <button
               className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300"
-              onClick={() => openModal("create-employee")}
+              onClick={() => openModal("create-client")}
             >
-              Add Employee
+              Add Client
             </button>
           </div>
           <div className="relative flex flex-col bg-clip-border bg-white text-gray-700 overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
@@ -173,16 +170,14 @@ const EmployeeTable: React.FC = () => {
         close={() => setIsModalOpen(false)}
         formType={formType}
       >
-        {formType === "create-employee" && <EmployeeForm />}
-        {formType === "edit-employee" && (
-          <EmployeeForm
-            initialData={selectedEmployee as IEmployee | undefined}
-          />
+        {formType === "create-client" && <ClientForm />}
+        {formType === "edit-client" && (
+          <ClientForm initialData={selectedClient as IClient | undefined} />
         )}
-        {formType === "delete-employee" && (
+        {formType === "delete-client" && (
           <DeleteConfirmation
-            id={selectedEmployee?.id || ""}
-            name={selectedEmployee?.name || ""}
+            id={selectedClient?.id || ""}
+            name={selectedClient?.name || ""}
             close={() => setIsModalOpen(false)}
           />
         )}
@@ -191,4 +186,4 @@ const EmployeeTable: React.FC = () => {
   );
 };
 
-export default EmployeeTable;
+export default ClientTable;

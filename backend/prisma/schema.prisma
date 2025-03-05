@@ -46,3 +46,23 @@ model Employee {
   createdBy         String
   updatedBy         String
 }
+
+model Client {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String  @unique
+  phone     String
+  isActive  Boolean
+  createdBy String
+  updatedBy String
+}
+
+model Supplier {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String  @unique
+  phone     String
+  isActive  Boolean
+  createdBy String
+  updatedBy String
+}
