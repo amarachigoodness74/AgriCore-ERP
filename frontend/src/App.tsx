@@ -84,7 +84,6 @@ const App = () => {
                 path="inventory/purchase-orders"
                 element={<PurchaseOrderList />}
               />
-              {/* <Route path="settings" element={<Settings />} /> */}
             </Route>
           </Routes>
         </Suspense>

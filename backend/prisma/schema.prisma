@@ -66,3 +66,20 @@ model Supplier {
   createdBy String
   updatedBy String
 }
+
+model Category {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String    @unique
+  products Product[] @relation("CategoryOnProducts")
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  sku         String   @unique
+  categoryId  String
+  category    Category @relation("CategoryOnProducts", fields: [categoryId], references: [id])
+  unitPrice   Float
+  quantity    Int
+  description String?
+}
